@@ -49,5 +49,11 @@ namespace Sdf.Fundamentals.Cache
         /// 清空缓存
         /// </summary>
         void Clear();
+        /// <summary>
+        /// 键是否存在
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        bool KeyExists(string key);
     }
 }

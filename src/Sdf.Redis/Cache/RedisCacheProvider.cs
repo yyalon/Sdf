@@ -46,6 +46,7 @@ namespace Sdf.Redis.Cache
 
         public T Get<T>(string key)
         {
+            
             string json = Database.StringGet(key);
             if (string.IsNullOrEmpty(json))
                 return default(T);
@@ -72,10 +73,15 @@ namespace Sdf.Redis.Cache
         {
             _Set(key, value, slidingExpiration);
         }
+        public bool KeyExists(string key)
+        {
+            return Database.KeyExists(key);
+        }
         private void _Set(string key, object value, TimeSpan? slidingExpiration)
         {
             string json = _serializer.Serialize(value);
             Database.StringSet(key, json, slidingExpiration);
         }
+       
     }
 }

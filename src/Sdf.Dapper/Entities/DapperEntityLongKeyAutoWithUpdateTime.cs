@@ -6,6 +6,6 @@ namespace Sdf.Dapper.Entities
     public class DapperEntityLongKey: EntityLongPrimaryKey
     {
         [ExplicitKey]
-        public override long Id { get => base.Id;  set => base.Id = value; }
+        public override long Id { get => base.Id; protected set => base.Id = value; }
     }
 }
