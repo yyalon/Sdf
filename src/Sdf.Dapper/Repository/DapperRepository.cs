@@ -53,7 +53,10 @@ namespace Sdf.Dapper
         {
             return DbContext.SelectFirse<T>(sql, param);
         }
-
+        public virtual T ExecuteScalar<T>(string sql, object param = null)
+        {
+            return DbContext.ExecuteScalar<T>(sql, param);
+        }
         public virtual void Update<TEntity>(TEntity entity) where TEntity : class
         {
              DbContext.Update<TEntity>(entity);
