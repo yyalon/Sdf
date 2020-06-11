@@ -88,7 +88,7 @@ namespace Sdf.Dapper
         }
         public T SelectFirse<T>(string sql, object param = null)
         {
-            return GetDbConnection().ExecuteScalar<T>(sql, param, BeginTransaction(), _dapperOption.CommontTimeOut);
+            return GetDbConnection().QuerySingleOrDefault<T>(sql, param, BeginTransaction(), _dapperOption.CommontTimeOut);
 
         }
         public T ExecuteScalar<T>(string sql, object param = null)

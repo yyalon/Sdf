@@ -12,6 +12,7 @@ namespace Sdf.Dapper.Mysql
     {
         public static SdfConfigManager UseDapper(this SdfConfigManager sdfConfig,Func<IResolver, DapperOption, DapperOption> action)
         {
+            sdfConfig.UseDapper();
             DapperOption dapperOption = new DapperOption(DbType.MYSQL);
             sdfConfig.Register.RegisterSingleton<DapperOption>(resolver =>
             {

@@ -11,7 +11,6 @@ namespace Sdf.Dapper
         {
             sdfConfig.Register.RegisterTransient<IDbContext, DapperDbContext>();
             sdfConfig.Register.RegisterTransient<IUnitOfWork, DapperUnitOfWork>();
-            sdfConfig.Register.RegisterTransient<IDapperRepository, DapperRepository>();
             return sdfConfig;
         }
     }

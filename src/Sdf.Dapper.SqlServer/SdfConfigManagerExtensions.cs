@@ -12,13 +12,13 @@ namespace Sdf.Dapper.SqlServer
     {
         public static SdfConfigManager UseDapper(this SdfConfigManager sdfConfig, Func<IResolver, DapperOption, DapperOption> action)
         {
+            sdfConfig.UseDapper();
             DapperOption dapperOption = new DapperOption(DbType.MSSQL);
             sdfConfig.Register.RegisterSingleton<DapperOption>(resolver =>
             {
                 dapperOption = action(resolver, dapperOption);
                 return dapperOption;
             });
-            sdfConfig.Register.RegisterSingleton<DapperOption>(dapperOption);
             sdfConfig.Register.RegisterTransient<IDbConnectionProvider, DbConnectionProvider>();
             sdfConfig.Register.RegisterTransient<IDapperRepository, SqlServerDapperRepository>();
             return sdfConfig;
