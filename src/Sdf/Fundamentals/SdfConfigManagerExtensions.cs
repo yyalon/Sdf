@@ -17,6 +17,7 @@ namespace Sdf.Fundamentals
         {
             TextJsonSerializer textJsonSerializer = new TextJsonSerializer();
             JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+            jsonSerializerOptions.Converters.Add(new JsonNonStringKeyDictionaryConverterFactory());
             if (action != null)
                 action(jsonSerializerOptions);
             textJsonSerializer.JsonSerializerOptions = jsonSerializerOptions;
