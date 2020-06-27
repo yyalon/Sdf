@@ -12,14 +12,18 @@ namespace Sdf.EF
 {
     public static class SdfConfigManagerExtensions
     {
-        public static SdfConfigManager UseEF(this SdfConfigManager sdfConfig, DbContextOptions contextOption)
+        public static SdfConfigManager UseEF<TDbContext>(this SdfConfigManager sdfConfig, DbContextOptions contextOption) where TDbContext:DbContext
         {
+            sdfConfig.Register.RegisterSingleton<DbContextOptions>(contextOption);
+            sdfConfig.Register.RegisterTransient<DbContext, TDbContext>();
             sdfConfig.Register.RegisterTransient<IDbContext, EFDbContext>();
             sdfConfig.Register.RegisterTransient<IUnitOfWork, EfUnitOfWork>();
             return sdfConfig;
         }
-        public static SdfConfigManager UseEF(this SdfConfigManager sdfConfig, Func<IResolver, DbContextOptions> contextOption)
+        public static SdfConfigManager UseEF<TDbContext>(this SdfConfigManager sdfConfig, Func<IResolver, DbContextOptions> contextOption) where TDbContext : DbContext
         {
+            sdfConfig.Register.RegisterSingleton<DbContextOptions>(contextOption);
+            sdfConfig.Register.RegisterTransient<DbContext, TDbContext>();
             sdfConfig.Register.RegisterTransient<IDbContext, EFDbContext>();
             sdfConfig.Register.RegisterTransient<IUnitOfWork, EfUnitOfWork>();
             return sdfConfig;
