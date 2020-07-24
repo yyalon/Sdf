@@ -6,11 +6,11 @@ namespace Sdf.Application
 {
     public class OperationResult
     {
-        public string Msg { get; protected set; }
-        public bool State { get; protected set; }
+        public string Msg { get;  set; }
+        public bool State { get;  set; }
         //public bool IsHasNextOperation { get; set; }
         public object Result { get; set; }
-        public List<object> ErrorList { get; protected set; }
+        public List<object> ErrorList { get;  set; }
         public OperationResult(string msg, bool state)
         {
             this.Msg = msg;
@@ -97,11 +97,11 @@ namespace Sdf.Application
     }
     public class OperationResult<T>
     {
-        public string Msg { get; private set; }
-        public bool State { get; private set; }
+        public string Msg { get;  set; }
+        public bool State { get;  set; }
         public bool IsHasNextOperation { get; set; }
         public T Result { get; set; }
-        public List<object> ErrorList { get; private set; }
+        public List<object> ErrorList { get;  set; }
         public OperationResult(string msg, bool state)
         {
             this.Msg = msg;

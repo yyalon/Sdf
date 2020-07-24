@@ -15,6 +15,7 @@ namespace Sdf.Domain.Uow
         {
             get; set;
         }
+       
         private readonly IocManager _iocManager;
         public UowManager(IocManager iocManager)
         {
@@ -24,7 +25,6 @@ namespace Sdf.Domain.Uow
 
         public IUnitOfWork Begin(UnitOfWorkOption option = null)
         {
-
             IUnitOfWork current = null;
             if (option == null)
                 option = new UnitOfWorkOption() { Scope = TransactionScopeOption.Required };

@@ -43,17 +43,11 @@ namespace Sdf.Domain.Uow
             var uow = uowManager.Begin();
             invocation.Proceed();
             var returnValue = invocation.ReturnValue;
-            //object operationResult = null;
-            //if (IsOperationResultType(returnValue.GetType()))
-            //{
-            //    operationResult = returnValue as OperationResult;
-            //}
             if (uow != null)
             {
                 var dbRes = uow.Complete();
                 if (returnValue != null && dbRes != null)
                 {
-                    //如果数据库操作发生异常，同时业务操作返回操作成功  && operationResult.State
                     if (!dbRes.State)
                     {
                         if (IsOperationResultType(returnValue.GetType()))
@@ -66,7 +60,6 @@ namespace Sdf.Domain.Uow
                                     errList.Add(item.Message);
                                 }
                             }
-                            //dbRes.ErrorList != null ? dbRes.ErrorList.Select(m => m.Message).ToList() : null
                             invocation.ReturnValue = CreateFaildOperationResult(returnValue.GetType(), errList);
                         }
                     }
@@ -81,37 +74,6 @@ namespace Sdf.Domain.Uow
                 }
                 uow.Dispose();
             }
-
-
-            //var uow = uowManager.Begin();
-            //invocation.Proceed();
-            //var returnValue = invocation.ReturnValue;
-            //OperationResult operationResult = null;
-            //if (returnValue != null && ReflectionHelper.TypeIsSame(returnValue.GetType(), typeof(OperationResult)))
-            //{
-            //    operationResult = returnValue as OperationResult;
-            //}
-            //if (uow != null)
-            //{
-            //    var dbRes = uow.Complete();
-            //    if (operationResult != null && dbRes != null)
-            //    {
-            //        //如果数据库操作发生异常，同时业务操作返回操作成功
-            //        if (!dbRes.State && operationResult.State)
-            //        {
-            //            invocation.ReturnValue = new OperationResult("发生异常", false, dbRes.ErrorList != null ? dbRes.ErrorList.Select(m => m.Message).ToList() : null);
-            //        }
-            //    }
-            //    while (!uowManager.CompletedHandles.IsEmpty)
-            //    {
-            //        Action<DbChangeResult> handle = null;
-            //        if (uowManager.CompletedHandles.TryDequeue(out handle))
-            //        {
-            //            handle.Invoke(dbRes);
-            //        }
-            //    }
-            //    uow.Dispose();
-            //}
         }
     }
 }

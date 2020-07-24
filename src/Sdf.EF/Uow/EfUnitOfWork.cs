@@ -61,5 +61,10 @@ namespace Sdf.EF.Uow
         {
             Dispose();
         }
+
+        public T GetDbContext<T>() where T : IDbContext
+        {
+            throw new NotImplementedException();
+        }
     }
 }
