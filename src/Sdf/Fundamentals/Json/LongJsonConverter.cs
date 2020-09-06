@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Sdf.Fundamentals.Json
 {
+    
     public class LongJsonConverter : JsonConverter<long>
     {
         public override long Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
