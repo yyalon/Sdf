@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Sdf.Core;
 using Sdf.Fundamentals.Configuration;
+using Sdf.Fundamentals.Json;
 using Sdf.Fundamentals.Security;
 using Sdf.Fundamentals.Serializer;
 using System;
@@ -18,6 +19,12 @@ namespace Sdf.Fundamentals
             TextJsonSerializer textJsonSerializer = new TextJsonSerializer();
             JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.Converters.Add(new JsonNonStringKeyDictionaryConverterFactory());
+            jsonSerializerOptions.Converters.Add(new LongJsonConverter());
+            jsonSerializerOptions.Converters.Add(new LongAvailableNullJsonConverter());
+            jsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+            jsonSerializerOptions.Converters.Add(new DatetimeAvailableNullJsonConverter());
+            jsonSerializerOptions.Converters.Add(new DoubleJsonConverter());
+            jsonSerializerOptions.Converters.Add(new DoubleAvailableNullJsonConverter());
             if (action != null)
                 action(jsonSerializerOptions);
             textJsonSerializer.JsonSerializerOptions = jsonSerializerOptions;
