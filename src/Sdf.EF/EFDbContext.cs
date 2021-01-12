@@ -4,6 +4,7 @@ using Sdf.Common;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Exceptions;
+using Sdf.Fundamentals.Logs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,9 +17,9 @@ namespace Sdf.EF
     public class EFDbContext : IDbContext
     {
         private DbContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
-        public EFDbContext(DbContext dbContext, ILogger<EFDbContext> log, IDbChangeEventHandler dbChangeEventHandler)
+        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler)
         {
             _dbContext = dbContext;
             _logger = log;

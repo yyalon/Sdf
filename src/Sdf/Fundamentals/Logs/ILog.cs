@@ -86,6 +86,6 @@ namespace Sdf.Fundamentals.Logs
 
         string LogCritical(string message, params object[] args);
         #endregion
-        //ILogger Logger { get; }
+       
     }
 }
