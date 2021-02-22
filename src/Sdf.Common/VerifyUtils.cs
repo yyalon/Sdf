@@ -53,5 +53,15 @@ namespace Sdf.Common
             string pattern2 = @"[·！#￥——：；“”‘、，|。？、\s]";
             return Regex.IsMatch(text, pattern1) || Regex.IsMatch(text, pattern2);
         }
+        /// <summary>
+        /// 验证是否为IP
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
+        public static bool VerifyIP(string ip)
+        {
+            string pattern = @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$";
+            return Regex.IsMatch(ip, pattern)
+        }
     }
 }
