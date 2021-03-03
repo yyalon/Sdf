@@ -61,7 +61,7 @@ namespace Sdf.Common
         public static bool VerifyIP(string ip)
         {
             string pattern = @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$";
-            return Regex.IsMatch(ip, pattern)
+            return Regex.IsMatch(ip, pattern);
         }
     }
 }
