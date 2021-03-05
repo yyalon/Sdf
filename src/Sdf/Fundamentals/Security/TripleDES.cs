@@ -27,6 +27,19 @@ namespace Sdf.Fundamentals.Security
             byte[] resultArray = _Encrypt(text, key);
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
+       
+        /// <summary>
+        /// 解密
+        /// </summary>
+        /// <param name="encryptedText">Base64的加密字符串</param>
+        /// <returns></returns>
+        public string Decrypt(string encryptedText, string key=null)
+        {
+            encryptedText = encryptedText.Replace(' ', '+');
+            byte[] inputArray = Convert.FromBase64String(encryptedText);
+            byte[] resultArray = _Decrypt(inputArray, key);
+            return Encoding.UTF8.GetString(resultArray);
+        }
         public string EncryptToNumber(string text, string key = null)
         {
             byte[] resultArray = _Encrypt(text, key);
@@ -54,17 +67,6 @@ namespace Sdf.Fundamentals.Security
             {
                 inputArray[i] = (byte)(arr[i].ToInt());
             }
-            byte[] resultArray = _Decrypt(inputArray, key);
-            return Encoding.UTF8.GetString(resultArray);
-        }
-        /// <summary>
-        /// 解密
-        /// </summary>
-        /// <param name="encryptedText">Base64的加密字符串</param>
-        /// <returns></returns>
-        public string Decrypt(string encryptedText, string key=null)
-        {
-            byte[] inputArray = Convert.FromBase64String(encryptedText);
             byte[] resultArray = _Decrypt(inputArray, key);
             return Encoding.UTF8.GetString(resultArray);
         }
