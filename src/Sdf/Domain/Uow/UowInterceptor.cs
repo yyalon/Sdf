@@ -29,28 +29,71 @@ namespace Sdf.Domain.Uow
         {
             return type.IsValueType ? Activator.CreateInstance(type) : null;
         }
-        private object CreateFaildOperationResult(Type type,List<object> errList)
+        //private object CreateFaildOperationResult(Type type,List<object> errList)
+        //{
+        //    if (type.IsGenericType)
+        //    {
+        //        Type[] typeParameters = type.GetGenericArguments();
+        //        return Activator.CreateInstance(type, "数据库异常", false, GetDefaultValue(typeParameters.FirstOrDefault()), errList);
+        //    }
+        //    return Activator.CreateInstance(type, "数据库异常", false, null, errList);
+        //}
+        //private bool IsOperationResult(Type objectType, Type type)
+        //{
+        //    if (objectType.IsSubclassOf(type))
+        //    {
+        //        return true;
+        //    }
+        //    return objectType.FullName.ToLower() == type.FullName.ToLower();
+        //}
+        private bool IsOperationResult(Type objectType)
         {
-            if (type.IsGenericType)
+            if (objectType == typeof(OperationResult))
             {
-                Type[] typeParameters = type.GetGenericArguments();
-                return Activator.CreateInstance(type, "数据库异常", false, GetDefaultValue(typeParameters.FirstOrDefault()), errList);
+                return true;
             }
-            return Activator.CreateInstance(type, "数据库异常", false, null, errList);
+            if (objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(OperationResult<>))
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool? ParseOperationResultState(object obj)
+        {
+            if (IsOperationResult(obj.GetType()))
+            {
+                var pState = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
+                var stateValue = (bool)pState.GetValue(obj);
+                return stateValue;
+            }
+            return null;
+        }
+        private void SetOperationResultMsg(object obj,string msg, List<object> errList)
+        {
+            var pstate = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
+            var pmsg = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.Msg)).FirstOrDefault();
+            var perrorList = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.ErrorList)).FirstOrDefault();
+           
+            pstate.SetValue(obj, false);
+            pmsg.SetValue(obj, msg);
+            perrorList.SetValue(obj, errList);
         }
         public void Intercept(IInvocation invocation)
         {
             var uow = uowManager.Begin();
             invocation.Proceed();
-            var returnValue = invocation.ReturnValue;
+
             if (uow != null)
             {
-                var dbRes = uow.Complete();
-                if (returnValue != null && dbRes != null)
+                var returnValue = invocation.ReturnValue;
+                bool? state = ParseOperationResultState(returnValue);
+               
+                if (state == null || !state.Value)
                 {
-                    if (!dbRes.State)
+                    var dbRes = uow.Complete();
+                    if (dbRes != null && !dbRes.State)
                     {
-                        if (IsOperationResultType(returnValue.GetType()))
+                        if (state.HasValue)
                         {
                             List<object> errList = new List<object>();
                             if (dbRes.ErrorList != null)
@@ -60,20 +103,63 @@ namespace Sdf.Domain.Uow
                                     errList.Add(item.Message);
                                 }
                             }
-                            invocation.ReturnValue = CreateFaildOperationResult(returnValue.GetType(), errList);
+                            SetOperationResultMsg(returnValue, "数据库异常", errList);
                         }
                     }
-                }
-                while (!uowManager.CompletedHandles.IsEmpty)
-                {
-                    Action<DbChangeResult> handle = null;
-                    if (uowManager.CompletedHandles.TryDequeue(out handle))
+                    while (!uowManager.CompletedHandles.IsEmpty)
                     {
-                        handle.Invoke(dbRes);
+                        Action<DbChangeResult> handle = null;
+                        if (uowManager.CompletedHandles.TryDequeue(out handle))
+                        {
+                            handle.Invoke(dbRes);
+                        }
                     }
                 }
                 uow.Dispose();
             }
+            //var uow = uowManager.Begin();
+            //invocation.Proceed();
+
+            //if (uow != null)
+            //{
+            //    var returnValue = invocation.ReturnValue;
+            //    OperationResult operationResult = null;
+            //    if (returnValue != null && IsOperationResult(returnValue.GetType(), typeof(OperationResult)))
+            //    {
+            //        operationResult = returnValue as OperationResult;
+            //    }
+            //    if (operationResult == null || operationResult.State)
+            //    {
+            //        var dbRes = uow.Complete();
+            //        if (returnValue != null && dbRes != null)
+            //        {
+            //            if (!dbRes.State)
+            //            {
+            //                if (IsOperationResultType(returnValue.GetType()))
+            //                {
+            //                    List<object> errList = new List<object>();
+            //                    if (dbRes.ErrorList != null)
+            //                    {
+            //                        foreach (var item in dbRes.ErrorList)
+            //                        {
+            //                            errList.Add(item.Message);
+            //                        }
+            //                    }
+            //                    invocation.ReturnValue = CreateFaildOperationResult(returnValue.GetType(), errList);
+            //                }
+            //            }
+            //        }
+            //        while (!uowManager.CompletedHandles.IsEmpty)
+            //        {
+            //            Action<DbChangeResult> handle = null;
+            //            if (uowManager.CompletedHandles.TryDequeue(out handle))
+            //            {
+            //                handle.Invoke(dbRes);
+            //            }
+            //        } 
+            //    }
+            //    uow.Dispose();
+            //}
         }
     }
 }
