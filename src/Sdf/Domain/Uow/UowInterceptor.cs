@@ -88,7 +88,7 @@ namespace Sdf.Domain.Uow
                 var returnValue = invocation.ReturnValue;
                 bool? state = ParseOperationResultState(returnValue);
                
-                if (state == null || !state.Value)
+                if (state == null || state.Value)
                 {
                     var dbRes = uow.Complete();
                     if (dbRes != null && !dbRes.State)
