@@ -60,7 +60,7 @@ namespace Sdf.Domain.Uow
         }
         private bool? ParseOperationResultState(object obj)
         {
-            if (IsOperationResult(obj.GetType()))
+            if (obj != null && IsOperationResult(obj.GetType()))
             {
                 var pState = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
                 var stateValue = (bool)pState.GetValue(obj);
@@ -70,6 +70,10 @@ namespace Sdf.Domain.Uow
         }
         private void SetOperationResultMsg(object obj,string msg, List<object> errList)
         {
+            if (obj == null)
+            {
+                return;
+            }
             var pstate = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
             var pmsg = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.Msg)).FirstOrDefault();
             var perrorList = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.ErrorList)).FirstOrDefault();
