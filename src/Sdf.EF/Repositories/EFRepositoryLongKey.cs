@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Sdf.EF.Repositories
 {
-    public class EFRepositoryLongKey<TEntity> : IEFRepositoryLongKey<TEntity> where TEntity : Entity<long>
+    public class EFRepositoryLongKey<TEntity> : IEFRepositoryLongKey<TEntity> where TEntity : Entity<long> , new()
     {
         private EFDbContext _dbContext;
         public EFDbContext DbContext
@@ -132,14 +132,20 @@ namespace Sdf.EF.Repositories
 
         public virtual void Delete(TEntity entity)
         {
-            Dbset.Remove(entity);
+            //var entitys = new TEntity();
+            //entitys.SetId(entity.Id);
+            //Dbset.Remove(entity);
+            Delete(entity.Id);
         }
 
         public virtual void Delete(long id)
         {
-            var entity = Get(id);
-            if (entity != null)
-                Delete(entity);
+            var entity = new TEntity();
+            entity.SetId(id);
+            Delete(entity);
+            //var entity = Get(id);
+            //if (entity != null)
+            //    Delete(entity);
         }
 
         public virtual void RemoveRange(IEnumerable<TEntity> list)
