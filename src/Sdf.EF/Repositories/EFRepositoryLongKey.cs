@@ -142,7 +142,7 @@ namespace Sdf.EF.Repositories
         {
             var entity = new TEntity();
             entity.SetId(id);
-            Delete(entity);
+            Dbset.Remove(entity);
             //var entity = Get(id);
             //if (entity != null)
             //    Delete(entity);
