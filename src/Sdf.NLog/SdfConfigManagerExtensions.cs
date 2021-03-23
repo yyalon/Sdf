@@ -16,6 +16,7 @@ namespace Sdf.NLogLogger
             //sdfConfig.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => CreateNLogLoggerProvider(options)));
             //sdfConfig.Register.RegisterGenericTransient(typeof(ILog<>), typeof(Log<>));,NLogProviderOptions options =null
             sdfConfig.Register.RegisterTransient<ILog, Log>();
+            sdfConfig.Register.RegisterSingleton<ILoggerFactory, NLoggerFactory>();
             return sdfConfig;
         }
         //private static NLogLoggerProvider CreateNLogLoggerProvider(NLogProviderOptions options)

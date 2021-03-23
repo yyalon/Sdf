@@ -15,6 +15,10 @@ namespace Sdf.NLogLogger
         {
             _logger = LogManager.GetLogger("default");
         }
+        public Log(Logger logger)
+        {
+            _logger = logger;
+        }
         private string GetNewEventId()
         {
             return Guid.NewGuid().ToString("N");
