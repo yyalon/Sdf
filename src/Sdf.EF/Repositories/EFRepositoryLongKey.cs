@@ -134,8 +134,8 @@ namespace Sdf.EF.Repositories
         {
             //var entitys = new TEntity();
             //entitys.SetId(entity.Id);
-            //Dbset.Remove(entity);
-            Delete(entity.Id);
+            Dbset.Remove(entity);
+            //Delete(entity.Id);
         }
 
         public virtual void Delete(long id)

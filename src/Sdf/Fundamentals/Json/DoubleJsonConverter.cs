@@ -20,7 +20,7 @@ namespace Sdf.Fundamentals.Json
             {
                 return 0;
             }
-            return Convert.ToInt64(longValue);
+            return Convert.ToDouble(longValue);
         }
         /// <summary>
         /// 序列化
@@ -55,7 +55,7 @@ namespace Sdf.Fundamentals.Json
             {
                 return null;
             }
-            return Convert.ToInt64(longValue);
+            return Convert.ToDouble(longValue);
         }
         /// <summary>
         /// 序列化
