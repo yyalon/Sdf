@@ -154,7 +154,7 @@ namespace Sdf.EF.Repositories
         }
         public virtual void RemoveRange(Expression<Func<TEntity, bool>> expression)
         {
-            var list = GetIQueryable().Where(expression).ToList();
+            var list = GetIQueryable().Where(expression).Select(m=>new TEntity() {  Id=m.Id}).ToList();
             if (list != null)
                 Dbset.RemoveRange(list);
         }

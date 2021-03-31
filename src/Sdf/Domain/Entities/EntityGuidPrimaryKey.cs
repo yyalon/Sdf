@@ -7,7 +7,7 @@ namespace Sdf.Domain.Entities
 {
     public abstract class EntityGuidPrimaryKey : Entity<Guid>
     {
-        public override Guid Id { get; protected set; }
+        public override Guid Id { get;  set; }
         public override bool Equals(Entity<Guid> obj)
         {
             return this.Id == obj.Id;
@@ -30,7 +30,7 @@ namespace Sdf.Domain.Entities
                 }
                 return id.Value;
             }
-            protected set
+            set
             {
                 id = value;
             }

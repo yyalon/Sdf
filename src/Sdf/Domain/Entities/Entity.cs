@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Sdf.Domain.Entities
@@ -7,7 +8,8 @@ namespace Sdf.Domain.Entities
     [Serializable]
     public abstract class Entity<TPrimaryKey> : Mapper.IUseMapper
     {
-        public virtual TPrimaryKey Id { get; protected set; }
+        [Key]
+        public virtual TPrimaryKey Id { get; set; }
 
         public abstract bool Equals(Entity<TPrimaryKey> obj);
 

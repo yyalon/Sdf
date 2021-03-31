@@ -18,7 +18,7 @@ namespace Sdf.Domain.Entities
             {
                 return id;
             }
-            protected set
+            set
             {
                 id = value;
             }
@@ -48,7 +48,7 @@ namespace Sdf.Domain.Entities
                 }
                 return id.Value;
             }
-            protected set
+            set
             {
                 id = value;
             }
