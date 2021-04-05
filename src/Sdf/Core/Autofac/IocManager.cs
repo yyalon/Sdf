@@ -16,7 +16,7 @@ namespace Sdf.Core.Autofac
     public class IocManager
     {
         internal ContainerBuilder AutofacBuilder;
-        internal IContainer Container { get; private set; }
+        public IContainer Container { get; private set; }
         internal List<RegistrationStore> RegistrationBuilders;
 
         public IocManager()
