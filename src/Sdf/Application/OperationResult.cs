@@ -94,6 +94,10 @@ namespace Sdf.Application
         /// 默认的失败操作结果
         /// </summary>
         public static OperationResult DefaultFailedResult = new OperationResult("操作失败", false);
+        public override string ToString()
+        {
+            return $"state:{State} msg:{Msg}";
+        }
     }
     public class OperationResult<T>
     {
