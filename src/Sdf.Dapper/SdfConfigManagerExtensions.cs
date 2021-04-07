@@ -9,8 +9,8 @@ namespace Sdf.Dapper
     {
         public static SdfConfigManager UseDapper(this SdfConfigManager sdfConfig)
         {
-            sdfConfig.Register.RegisterTransient<IDbContext, DapperDbContext>();
-            sdfConfig.Register.RegisterTransient<IUnitOfWork, DapperUnitOfWork>();
+            sdfConfig.Register.RegisterTransient<IDbContext, DapperDbContext>("dapper");
+            sdfConfig.Register.RegisterTransient<IUnitOfWork, DapperUnitOfWork>("dapper");
             return sdfConfig;
         }
     }

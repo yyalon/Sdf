@@ -41,6 +41,7 @@ namespace Sdf.EF
         }
         public DbChangeResult SaveChage()
         {
+            
             var entrys = _dbContext.ChangeTracker.Entries();
             bool changeFlag = false;//默认没有更改
             List<ValidationResult> validationResults = new List<ValidationResult>();

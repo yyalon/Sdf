@@ -29,23 +29,7 @@ namespace Sdf.Domain.Uow
         {
             return type.IsValueType ? Activator.CreateInstance(type) : null;
         }
-        //private object CreateFaildOperationResult(Type type,List<object> errList)
-        //{
-        //    if (type.IsGenericType)
-        //    {
-        //        Type[] typeParameters = type.GetGenericArguments();
-        //        return Activator.CreateInstance(type, "数据库异常", false, GetDefaultValue(typeParameters.FirstOrDefault()), errList);
-        //    }
-        //    return Activator.CreateInstance(type, "数据库异常", false, null, errList);
-        //}
-        //private bool IsOperationResult(Type objectType, Type type)
-        //{
-        //    if (objectType.IsSubclassOf(type))
-        //    {
-        //        return true;
-        //    }
-        //    return objectType.FullName.ToLower() == type.FullName.ToLower();
-        //}
+       
         private bool IsOperationResult(Type objectType)
         {
             if (objectType == typeof(OperationResult))
