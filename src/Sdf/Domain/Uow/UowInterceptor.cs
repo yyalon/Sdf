@@ -16,19 +16,19 @@ namespace Sdf.Domain.Uow
         {
             this.uowManager = uowManager;
         }
-        private bool IsOperationResultType(Type type)
-        {
-            if (type.IsGenericType)
-            {
-                var gt = type.GetGenericTypeDefinition();
-                return gt == typeof(OperationResult<>);
-            }
-            return type == typeof(OperationResult);
-        }
-        public object GetDefaultValue(Type type)
-        {
-            return type.IsValueType ? Activator.CreateInstance(type) : null;
-        }
+        //private bool IsOperationResultType(Type type)
+        //{
+        //    if (type.IsGenericType)
+        //    {
+        //        var gt = type.GetGenericTypeDefinition();
+        //        return gt == typeof(OperationResult<>);
+        //    }
+        //    return type == typeof(OperationResult);
+        //}
+        //public object GetDefaultValue(Type type)
+        //{
+        //    return type.IsValueType ? Activator.CreateInstance(type) : null;
+        //}
        
         private bool IsOperationResult(Type objectType)
         {
