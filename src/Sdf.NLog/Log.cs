@@ -28,7 +28,7 @@ namespace Sdf.NLogLogger
         {
             LogEventInfo logEventInfo = new LogEventInfo();
             logEventInfo.Exception = exception;
-            logEventInfo.Message = string.Format(message, args);
+            logEventInfo.Message = args!=null && args.Length>0? string.Format(message, args): message;
             logEventInfo.Level = logLevel;
             logEventInfo.Properties["EventGroupId"] = string.IsNullOrEmpty(eventGroupId.Name) ? eventGroupId.Id.ToString() : eventGroupId.Name;
             logEventInfo.Properties["EventId"] = eventId;
