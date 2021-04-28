@@ -36,7 +36,7 @@ namespace Sdf.Fundamentals.Json
             }
             else
             {
-                writer.WriteStringValue(String.Empty);
+                writer.WriteNumberValue(value);
             }
 
         }
@@ -71,7 +71,7 @@ namespace Sdf.Fundamentals.Json
             }
             else
             {
-                writer.WriteStringValue(String.Empty);
+                writer.WriteNumberValue(0);
             }
 
         }

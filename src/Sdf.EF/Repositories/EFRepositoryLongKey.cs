@@ -132,20 +132,31 @@ namespace Sdf.EF.Repositories
 
         public virtual void Delete(TEntity entity)
         {
-            //var entitys = new TEntity();
-            //entitys.SetId(entity.Id);
-            Dbset.Remove(entity);
-            //Delete(entity.Id);
+            if (entity is ISoftDelete)
+            {
+                ISoftDelete softDelete = entity as ISoftDelete;
+                softDelete.Delete();
+            }
+            else
+            {
+                Dbset.Remove(entity);
+            }
         }
 
         public virtual void Delete(long id)
         {
-            var entity = new TEntity();
-            entity.SetId(id);
-            Dbset.Remove(entity);
-            //var entity = Get(id);
-            //if (entity != null)
-            //    Delete(entity);
+            if (typeof(TEntity).IsAssignableFrom(typeof(ISoftDelete)))
+            {
+                var entity=Get(id);
+                ISoftDelete softDelete = entity as ISoftDelete;
+                softDelete.Delete();
+            }
+            else
+            {
+                var entity = new TEntity();
+                entity.SetId(id);
+                Dbset.Remove(entity);
+            }
         }
 
         public virtual void RemoveRange(IEnumerable<TEntity> list)

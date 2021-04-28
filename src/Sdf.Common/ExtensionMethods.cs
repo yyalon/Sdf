@@ -194,6 +194,25 @@ namespace Sdf.Common
         {
             return myselfType.IsSubclassOf(type) || myselfType == type;
         }
-
+        public static string ObjectPropertToString(this object obj,string separator=" ")
+        {
+            Type type = obj.GetType();
+            var pros = type.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < pros.Length; i++)
+            {
+                var item = pros[i];
+                if (i != pros.Length - 1)
+                {
+                    stringBuilder.Append($"{item.Name}:{item.GetValue(obj)}{separator}");
+                }
+                else
+                {
+                    stringBuilder.Append($"{item.Name}:{item.GetValue(obj)}");
+                }
+                
+            }
+            return stringBuilder.ToString();
+        }
     }
 }
