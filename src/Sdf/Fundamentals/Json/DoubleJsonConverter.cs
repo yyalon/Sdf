@@ -10,17 +10,26 @@ namespace Sdf.Fundamentals.Json
     {
         public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Number)
+            try
             {
-                return reader.GetDouble();
-            }
-            string longValue = reader.GetString();
+                if (reader.TokenType == JsonTokenType.Number)
+                {
+                    return reader.GetDouble();
+                }
+                string longValue = reader.GetString();
 
-            if (string.IsNullOrEmpty(longValue))
-            {
-                return 0;
+                if (string.IsNullOrEmpty(longValue))
+                {
+                    return 0;
+                }
+                return Convert.ToDouble(longValue);
             }
-            return Convert.ToDouble(longValue);
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+          
         }
         /// <summary>
         /// 序列化
@@ -38,7 +47,7 @@ namespace Sdf.Fundamentals.Json
             {
                 writer.WriteNumberValue(value);
             }
-
+            //writer.WriteStringValue(value.ToString());
         }
     }
     public class DoubleAvailableNullJsonConverter : JsonConverter<double?>
@@ -65,9 +74,9 @@ namespace Sdf.Fundamentals.Json
         /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, double? value, JsonSerializerOptions options)
         {
-            if (value != 0)
+            if (value.HasValue)
             {
-                writer.WriteStringValue(value.ToString());
+                writer.WriteNumberValue(value.Value);
             }
             else
             {

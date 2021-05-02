@@ -202,13 +202,14 @@ namespace Sdf.Common
             for (int i = 0; i < pros.Length; i++)
             {
                 var item = pros[i];
+                var value = item.GetValue(obj);
                 if (i != pros.Length - 1)
                 {
-                    stringBuilder.Append($"{item.Name}:{item.GetValue(obj)}{separator}");
+                    stringBuilder.Append($"{item.Name}:{value}{separator}");
                 }
                 else
                 {
-                    stringBuilder.Append($"{item.Name}:{item.GetValue(obj)}");
+                    stringBuilder.Append($"{item.Name}:{value}");
                 }
                 
             }

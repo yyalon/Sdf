@@ -23,7 +23,7 @@ namespace Sdf.Fundamentals
             jsonSerializerOptions.Converters.Add(new LongAvailableNullJsonConverter());
             jsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
             jsonSerializerOptions.Converters.Add(new DatetimeAvailableNullJsonConverter());
-            jsonSerializerOptions.Converters.Add(new DoubleJsonConverter());
+            //jsonSerializerOptions.Converters.Add(new DoubleJsonConverter());
             jsonSerializerOptions.Converters.Add(new DoubleAvailableNullJsonConverter());
             if (action != null)
                 action(jsonSerializerOptions);
