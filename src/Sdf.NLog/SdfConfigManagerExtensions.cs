@@ -1,4 +1,5 @@
 ﻿using NLog;
+using NLog.Targets;
 using Sdf.Core;
 using Sdf.Fundamentals.Logs;
 
@@ -13,8 +14,7 @@ namespace Sdf.NLogLogger
                 nlogConfigFile = "nlog.config";
             }
             LogManager.LoadConfiguration(nlogConfigFile);
-            //sdfConfig.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => CreateNLogLoggerProvider(options)));
-            //sdfConfig.Register.RegisterGenericTransient(typeof(ILog<>), typeof(Log<>));,NLogProviderOptions options =null
+           
             sdfConfig.Register.RegisterTransient<ILog, Log>();
             sdfConfig.Register.RegisterSingleton<ILoggerFactory, NLoggerFactory>();
             return sdfConfig;
