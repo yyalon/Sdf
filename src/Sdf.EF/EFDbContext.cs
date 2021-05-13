@@ -50,7 +50,6 @@ namespace Sdf.EF
             List<ValidationResult> validationResults = new List<ValidationResult>();
             foreach (var item in entrys)
             {
-                stringBuilder.AppendLine(item.Entity.GetType().FullName);
                 if (item.State != EntityState.Unchanged)
                 {
                     changeFlag = true;
