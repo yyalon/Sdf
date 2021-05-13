@@ -5,6 +5,7 @@ using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Exceptions;
 using Sdf.Fundamentals.Logs;
+using Sdf.Fundamentals.Serializer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,11 +20,13 @@ namespace Sdf.EF
         private DbContext _dbContext;
         private readonly ILog _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
-        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler)
+        private readonly ISerializer _serializer;
+        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler, ISerializer serializer)
         {
             _dbContext = dbContext;
             _logger = log;
             _dbChangeEventHandler = dbChangeEventHandler;
+            _serializer = serializer;
         }
         public void Dispose()
         {
@@ -47,6 +50,7 @@ namespace Sdf.EF
             List<ValidationResult> validationResults = new List<ValidationResult>();
             foreach (var item in entrys)
             {
+                stringBuilder.AppendLine(item.Entity.GetType().FullName);
                 if (item.State != EntityState.Unchanged)
                 {
                     changeFlag = true;
@@ -104,9 +108,8 @@ namespace Sdf.EF
             }
             catch (Exception ex)
             {
-                var innerException = ExceptionHelper.GetInnerExceptionMess(ex);
-                _logger.LogWarning(innerException, innerException.Message);
-                return new DbChangeResult(0, false, new List<Exception>() { innerException});
+                _logger.LogWarning(ex, ex.Message);
+                return new DbChangeResult(0, false, new List<Exception>() { ex });
             }
         }
     }
