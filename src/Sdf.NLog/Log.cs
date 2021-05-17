@@ -30,6 +30,7 @@ namespace Sdf.NLogLogger
             logEventInfo.Exception = exception;
             logEventInfo.Message = args!=null && args.Length>0? string.Format(message, args): message;
             logEventInfo.Level = logLevel;
+            //logEventInfo.SetStackTrace(exception.StackTrace, 0);
             logEventInfo.Properties["EventGroupId"] = string.IsNullOrEmpty(eventGroupId.Name) ? eventGroupId.Id.ToString() : eventGroupId.Name;
             logEventInfo.Properties["EventId"] = eventId;
             return logEventInfo;
@@ -194,6 +195,7 @@ namespace Sdf.NLogLogger
             string eventId = GetNewEventId();
             LogEventInfo logEventInfo = CreateLogEventInfo(new EventId(), eventId, NLog.LogLevel.Error, exception, message, args);
             _logger.Log(typeof(Log), logEventInfo);
+            //_logger.Error(exception, message);
             return eventId;
         }
 
