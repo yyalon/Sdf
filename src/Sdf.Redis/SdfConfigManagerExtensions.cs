@@ -17,6 +17,11 @@ namespace Sdf.Redis
             {
                 return action(resolver);
             });
+            sdfConfig.Register.RegisterSingleton<RedisConnectionOption>(resolver =>
+            {
+                return resolver.Resolve<RedisCacheOption>();
+            });
+             
             sdfConfig.Register.RegisterSingleton<ICache, RedisCacheProvider>();
             return sdfConfig;
         }
