@@ -161,13 +161,24 @@ namespace Sdf.EF.Repositories
 
         public virtual void RemoveRange(IEnumerable<TEntity> list)
         {
-            Dbset.RemoveRange(list);
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    Delete(item);
+                }
+            }
         }
         public virtual void RemoveRange(Expression<Func<TEntity, bool>> expression)
         {
             var list = GetIQueryable().Where(expression).Select(m=>new TEntity() {  Id=m.Id}).ToList();
             if (list != null)
-                Dbset.RemoveRange(list);
+            {
+                foreach (var item in list)
+                {
+                    Delete(item);
+                }
+            }
         }
         public virtual IDbContext GetCurrentDbContext()
         {
