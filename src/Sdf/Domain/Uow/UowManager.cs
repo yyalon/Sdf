@@ -29,7 +29,7 @@ namespace Sdf.Domain.Uow
             if (option == null)
                 option = new UnitOfWorkOption() { Scope = TransactionScopeOption.Required };
 
-            if (option.Scope == TransactionScopeOption.Required && Currnet == null)
+            if (option.Scope == TransactionScopeOption.Required && (Currnet == null || Currnet.IsDisposed))
             {
                 var resolver = _iocManager.GetResolver();
                 Currnet = resolver.Resolve<IUnitOfWork>();
