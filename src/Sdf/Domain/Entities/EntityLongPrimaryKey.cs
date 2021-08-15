@@ -32,6 +32,9 @@ namespace Sdf.Domain.Entities
     public class EntityLongPrimaryKeyAuto : Entity<long>
     {
         private long? id = null;
+        /// <summary>
+        /// 主键ID
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public override long Id
