@@ -8,6 +8,9 @@ namespace Sdf.Domain.Entities
     [Serializable]
     public abstract class Entity<TPrimaryKey> : Mapper.IUseMapper
     {
+        /// <summary>
+        /// 主键ID
+        /// </summary>
         [Key]
         public virtual TPrimaryKey Id { get; set; }
 
