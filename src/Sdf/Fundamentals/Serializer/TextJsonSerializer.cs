@@ -23,6 +23,10 @@ namespace Sdf.Fundamentals.Serializer
 
         public T Deserialize<T>(string json)
         {
+            if (string.IsNullOrEmpty(json))
+            {
+                return default(T);
+            }
             return JsonSerializer.Deserialize<T>(json, JsonSerializerOptions);
         }
 
