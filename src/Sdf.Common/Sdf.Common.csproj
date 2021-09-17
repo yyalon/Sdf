@@ -5,11 +5,11 @@
     <Description>简单快速开发框架公共类，包括工具类和一些扩展方法</Description>
     <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
-    <PackageIcon>简单易用.png</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="C:\Users\33104\Downloads\简单易用.png">
+    <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

@@ -6,7 +6,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>简单快速开发框架</Description>
     <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
-    <PackageIcon>简单易用.png</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
     <Version>1.0.2</Version>
   </PropertyGroup>
@@ -15,7 +15,7 @@
     <Compile Remove="Fundamentals\Logging\**" />
     <EmbeddedResource Remove="Fundamentals\Logging\**" />
     <None Remove="Fundamentals\Logging\**" />
-    <None Include="C:\Users\33104\Downloads\简单易用.png">
+    <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

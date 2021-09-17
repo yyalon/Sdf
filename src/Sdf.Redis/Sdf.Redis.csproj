@@ -5,7 +5,7 @@
     <Description>简单快速开发框架redis支持</Description>
     <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
-    <PackageIcon>简单易用.png</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="C:\Users\33104\Downloads\简单易用.png">
+    <None Include="icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

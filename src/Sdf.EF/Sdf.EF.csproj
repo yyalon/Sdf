@@ -5,8 +5,8 @@
     <Description>简单快速开发框架公共类，EF支持，包括ef实现的工作单元</Description>
     <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
-    <PackageIcon>简单易用.png</PackageIcon>
-    <Version>1.0.1</Version>
+    <PackageIcon>icon.png</PackageIcon>
+    <Version>1.0.2</Version>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
     <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="C:\Users\33104\Downloads\简单易用.png">
+    <None Include="..\Sdf\icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
