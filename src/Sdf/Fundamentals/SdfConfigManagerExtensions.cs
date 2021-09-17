@@ -75,5 +75,6 @@ namespace Sdf.Fundamentals
         {
             return sdfConfig.UseDefaultConfig<TConfig>(configuration).UseTextJsonSerializer(action).UseTripleDES(cryptoKey).UseDefaultMd5Crypto();
         }
+       
     }
 }

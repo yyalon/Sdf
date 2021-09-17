@@ -7,6 +7,8 @@
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
     <PackageIcon>简单易用.png</PackageIcon>
     <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

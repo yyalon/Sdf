@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using Sdf.Domain.Application;
 using Sdf.Domain.Db;
 using Sdf.Domain.Uow;
+using Sdf.Fundamentals;
 using Sdf.IdProvider;
 using Sdf.IdProvider.Default;
 using Sdf.Modules;
@@ -55,6 +56,10 @@ namespace Sdf.Core.Autofac
             if (!IsRegisted<IDbChangeEventHandler>())
             {
                 AutofacBuilder.RegisterType<DefaultDbChangeEventHandler>().As<IDbChangeEventHandler>().SingleInstance();
+            }
+            if (!IsRegisted<IDateTimeProvider>())
+            {
+                AutofacBuilder.RegisterInstance(new DateTimeProvider()).As<IDateTimeProvider>().SingleInstance();
             }
             RegisteApplicationService();
         }

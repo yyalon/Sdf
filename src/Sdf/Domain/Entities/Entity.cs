@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdf.Fundamentals;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -8,6 +9,10 @@ namespace Sdf.Domain.Entities
     [Serializable]
     public abstract class Entity<TPrimaryKey> : Mapper.IUseMapper
     {
+        public Entity()
+        {
+            createTime = GetDateTimeNow();
+        }
         /// <summary>
         /// 主键ID
         /// </summary>
@@ -21,7 +26,7 @@ namespace Sdf.Domain.Entities
             this.Id = id;
         }
 
-        private DateTime createTime = DateTime.Now;
+        private DateTime createTime;
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -39,6 +44,14 @@ namespace Sdf.Domain.Entities
         public virtual void SetCreateTime(DateTime dateTime)
         {
             this.CreateTime = dateTime;
+        }
+        private DateTime GetDateTimeNow()
+        {
+            using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
+            {
+                var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
+                return dateTimeProvider.GetNow();
+            }
         }
     }
 }

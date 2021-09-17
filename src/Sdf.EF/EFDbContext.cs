@@ -4,6 +4,7 @@ using Sdf.Common;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Exceptions;
+using Sdf.Fundamentals;
 using Sdf.Fundamentals.Logs;
 using Sdf.Fundamentals.Serializer;
 using System;
@@ -42,6 +43,14 @@ namespace Sdf.EF
         {
             return _dbContext;
         }
+        private DateTime GetDateTimeNow()
+        {
+            using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
+            {
+                var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
+                return dateTimeProvider.GetNow();
+            }
+        }
         public DbChangeResult SaveChage()
         {
             
@@ -56,7 +65,11 @@ namespace Sdf.EF
                     if (item.Entity is IUpdateTimeField)
                     {
                         var updateTimeField = item.Entity as IUpdateTimeField;
-                        updateTimeField.UpdateTime = DateTime.Now;
+                        if (updateTimeField.UpdateTime.Ticks == 0)
+                        {
+                            updateTimeField.UpdateTime = GetDateTimeNow();
+                        }
+                        
                     }
                 }
 
