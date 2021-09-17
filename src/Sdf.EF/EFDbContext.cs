@@ -65,11 +65,7 @@ namespace Sdf.EF
                     if (item.Entity is IUpdateTimeField)
                     {
                         var updateTimeField = item.Entity as IUpdateTimeField;
-                        if (updateTimeField.UpdateTime.Ticks == 0)
-                        {
-                            updateTimeField.UpdateTime = GetDateTimeNow();
-                        }
-                        
+                        updateTimeField.UpdateTime = GetDateTimeNow();
                     }
                 }
 
