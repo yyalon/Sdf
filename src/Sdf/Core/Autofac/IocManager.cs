@@ -57,10 +57,10 @@ namespace Sdf.Core.Autofac
             {
                 AutofacBuilder.RegisterType<DefaultDbChangeEventHandler>().As<IDbChangeEventHandler>().SingleInstance();
             }
-            if (!IsRegisted<IDateTimeProvider>())
-            {
-                AutofacBuilder.RegisterInstance(new DateTimeProvider()).As<IDateTimeProvider>().SingleInstance();
-            }
+            //if (!IsRegisted<IDateTimeProvider>())
+            //{
+            //    AutofacBuilder.RegisterInstance(new DateTimeProvider()).As<IDateTimeProvider>().SingleInstance();
+            //}
             RegisteApplicationService();
         }
         internal bool IsRegisted<TService>(string name = null) where TService : class

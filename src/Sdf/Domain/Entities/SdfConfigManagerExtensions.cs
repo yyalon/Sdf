@@ -13,10 +13,10 @@ namespace Sdf.Domain.Entities
         /// </summary>
         /// <param name="sdfConfig"></param>
         /// <returns></returns>
-        public static SdfConfigManager UseUtcTime(this SdfConfigManager sdfConfig)
-        {
-            sdfConfig.Register.RegisterSingleton<IDateTimeProvider>(new DateTimeProvider(true));
-            return sdfConfig;
-        }
+        //public static SdfConfigManager UseUtcTime(this SdfConfigManager sdfConfig)
+        //{
+        //    sdfConfig.Register.RegisterSingleton<IDateTimeProvider>(new DateTimeProvider(true));
+        //    return sdfConfig;
+        //}
     }
 }

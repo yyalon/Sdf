@@ -6,6 +6,7 @@
     <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

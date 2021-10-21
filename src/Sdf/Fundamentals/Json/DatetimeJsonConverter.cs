@@ -24,7 +24,6 @@ namespace Sdf.Fundamentals.Json
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            //writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
             writer.WriteStringValue(value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
         }
     }
@@ -49,6 +48,57 @@ namespace Sdf.Fundamentals.Json
             if (value.HasValue)
             {
                 writer.WriteStringValue(value.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+            }
+            else
+            {
+                writer.WriteStringValue(string.Empty);
+            }
+        }
+    }
+
+
+    public class UtcDatetimeJsonConverter : JsonConverter<DateTime>
+    {
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                if (DateTime.TryParse(reader.GetString(), out DateTime date))
+                    return date;
+                else
+                {
+                    return new DateTime();
+                }
+            }
+            return reader.GetDateTime();
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToUniversalTime());
+        }
+    }
+    public class UtcDatetimeAvailableNullJsonConverter : JsonConverter<DateTime?>
+    {
+        public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                if (DateTime.TryParse(reader.GetString(), out DateTime date))
+                    return date;
+                else
+                {
+                    return null;
+                }
+            }
+            return reader.GetDateTime();
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
+        {
+            if (value.HasValue)
+            {
+                writer.WriteStringValue(value.Value.ToUniversalTime());
             }
             else
             {

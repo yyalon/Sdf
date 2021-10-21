@@ -43,14 +43,14 @@ namespace Sdf.EF
         {
             return _dbContext;
         }
-        private DateTime GetDateTimeNow()
-        {
-            using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
-            {
-                var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
-                return dateTimeProvider.GetNow();
-            }
-        }
+        //private DateTime GetDateTimeNow()
+        //{
+        //    using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
+        //    {
+        //        var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
+        //        return dateTimeProvider.GetNow();
+        //    }
+        //}
         public DbChangeResult SaveChage()
         {
             
@@ -65,7 +65,8 @@ namespace Sdf.EF
                     if (item.Entity is IUpdateTimeField)
                     {
                         var updateTimeField = item.Entity as IUpdateTimeField;
-                        updateTimeField.UpdateTime = GetDateTimeNow();
+                        //GetDateTimeNow();
+                        updateTimeField.UpdateTime = DateTime.Now;
                     }
                 }
 

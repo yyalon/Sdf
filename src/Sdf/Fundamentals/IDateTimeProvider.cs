@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Sdf.Fundamentals
 {
-    public interface IDateTimeProvider
-    {
-        DateTime GetNow();
-    }
+    //public interface IDateTimeProvider
+    //{
+    //    bool IsUtc { get; }
+    //    DateTime GetNow();
+    //}
 }

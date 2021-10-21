@@ -11,7 +11,7 @@ namespace Sdf.Domain.Entities
     {
         public Entity()
         {
-            createTime = GetDateTimeNow();
+            createTime = DateTime.Now;
         }
         /// <summary>
         /// 主键ID
@@ -45,13 +45,17 @@ namespace Sdf.Domain.Entities
         {
             this.CreateTime = dateTime;
         }
-        private DateTime GetDateTimeNow()
-        {
-            using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
-            {
-                var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
-                return dateTimeProvider.GetNow();
-            }
-        }
+        
+        //public IDateTimeProvider DateTimeProvider
+        //{
+        //    get
+        //    {
+        //        using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
+        //        {
+        //            var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
+        //            return dateTimeProvider;
+        //        }
+        //    }
+        //}
     }
 }
