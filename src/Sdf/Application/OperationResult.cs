@@ -22,6 +22,7 @@ namespace Sdf.Application
             this.State = state;
             this.Result = result;
         }
+  
         public OperationResult(string msg, bool state, object result, List<object> errorList)
         {
             this.Msg = msg;
@@ -39,6 +40,17 @@ namespace Sdf.Application
         public OperationResult()
         {
 
+        }
+        public virtual void CreateDefaultSuccessResult(string msg)
+        { 
+            this.Msg=msg;
+            this.State = true;
+        }
+        public virtual void CreateDefaultFailedResult(string msg, List<object> errorList)
+        {
+            this.Msg = msg;
+            this.State = false;
+            this.ErrorList=errorList;
         }
         /// <summary>
         /// 创建Success的OperationResult

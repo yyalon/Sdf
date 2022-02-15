@@ -12,16 +12,14 @@ namespace Sdf.Domain.Uow
     public class UowInterceptor:IInterceptor
     {
         private IUowManager uowManager;
-        private string id;
         public UowInterceptor(IUowManager uowManager)
         {
             this.uowManager = uowManager;
-            id = Guid.NewGuid().ToString();
         }
        
         private bool IsOperationResult(Type objectType)
         {
-            if (objectType == typeof(OperationResult))
+            if (objectType == typeof(OperationResult) || objectType.IsSubclassOf(typeof(OperationResult)))
             {
                 return true;
             }
@@ -41,20 +39,16 @@ namespace Sdf.Domain.Uow
             }
             return null;
         }
-        //private void SetOperationResultMsg(object obj,string msg, List<object> errList)
-        //{
-        //    if (obj == null)
-        //    {
-        //        return;
-        //    }
-        //    var pstate = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
-        //    var pmsg = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.Msg)).FirstOrDefault();
-        //    var perrorList = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.ErrorList)).FirstOrDefault();
-           
-        //    pstate.SetValue(obj, false);
-        //    pmsg.SetValue(obj, msg);
-        //    perrorList.SetValue(obj, errList);
-        //}
+        private object CreateFailedOperationResult(Type type, string msg, List<object> errList)
+        {
+            var obj = Activator.CreateInstance(type);
+            if (obj != null)
+            {
+                var operationResult = obj as OperationResult;
+                operationResult.CreateDefaultFailedResult(msg, errList);
+            }
+            return obj;
+        }
         public void Intercept(IInvocation invocation)
         {
             var uow = uowManager.Begin();
@@ -81,7 +75,8 @@ namespace Sdf.Domain.Uow
                                     errList.Add(item.Message);
                                 }
                             }
-                            invocation.ReturnValue = OperationResult.CreateFailedResult("数据库异常", errList);
+                            invocation.ReturnValue = CreateFailedOperationResult(returnValue.GetType(), "数据库异常", errList);
+                            //invocation.ReturnValue = OperationResult.CreateFailedResult("数据库异常", errList);
                             //SetOperationResultMsg(returnValue, "数据库异常", errList);
                         }
                     }
