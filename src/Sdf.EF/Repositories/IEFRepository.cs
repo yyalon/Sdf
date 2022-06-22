@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Domain.Uow;
@@ -6,30 +7,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.EF.Repositories
 {
     public interface IEFRepository<TEntity, TPrimaryKey> : IUowProxy where TEntity : Entity<TPrimaryKey>
     {
-        IQueryable<TEntity> GetIQueryable();
-        void SetDbContext(IDbContext dbContext);
-        IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> expression = null, bool noTracking = false);
-        TEntity Get(TPrimaryKey id, bool noTracking = false);
-     
-        TEntity SelectFirse(Expression<Func<TEntity, bool>> expression, bool noTracking = false);
-        int Count(Expression<Func<TEntity, bool>> expression = null);
-        long CountLong(Expression<Func<TEntity, bool>> expression = null);
-        void Insert(TEntity entity);
-        void InsertRange(IEnumerable<TEntity> list);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
-        void Delete(TPrimaryKey id);
-        void RemoveRange(Expression<Func<TEntity, bool>> expression);
-        void RemoveRange(IEnumerable<TEntity> list);
-        bool Any(Expression<Func<TEntity, bool>> expression);
-        IQueryable<TEntity> GetPageList(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, out int total, bool noTracking = false);
         IDbContext GetCurrentDbContext();
-        TEntity Add(TEntity entity);
+        
+        DbSet<TEntity> SetTracking();
+        IQueryable<TEntity> SetNoTracking();
+
+        Task<List<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, out int total, bool tracking = false, CancellationToken cancellationToken = default);
+        Task<IQueryable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default);
+        Task<TEntity> GetAsync(TPrimaryKey id, bool tracking = false, CancellationToken cancellationToken = default);
+        Task<TEntity> GetAsync<TProperty>(long id, bool noTracking = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, TProperty>> includeFilter = null, CancellationToken cancellationToken = default);
+        Task<TEntity> SelectFirseAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task<long> CountLongAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+
+        Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task InsertRangeAsync(IEnumerable<TEntity> list, CancellationToken cancellationToken = default);
+        Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
+        Task RemoveRangeAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task RemoveRangeAsync(IEnumerable<TEntity> list, CancellationToken cancellationToken = default);
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
     }
 }

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.EF.Repositories
 {
@@ -50,25 +52,47 @@ namespace Sdf.EF.Repositories
             _uowManager = uowManager;
         }
 
-        public virtual IQueryable<TEntity> GetIQueryable()
+        public DbSet<TEntity> SetTracking()
         {
-
+            return Dbset;
+        }
+        public IQueryable<TEntity> SetNoTracking()
+        {
             return Dbset.AsQueryable();
         }
 
-        public virtual IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> expression = null, bool noTracking = false)
+        private IQueryable<TEntity> GetQueryable(bool tracking = false)
         {
-            IQueryable<TEntity> iQueryable = null;
-            if (expression != null)
-                iQueryable = GetIQueryable().Where(expression);
+            if (tracking)
+            {
+                return SetTracking().AsQueryable();
+            }
             else
-                iQueryable = GetIQueryable();
-            if (noTracking)
-                iQueryable = iQueryable.AsNoTracking();
-            return iQueryable;
+            {
+                return SetNoTracking();
+            }
         }
 
-        public virtual TEntity Get(long id, bool noTracking = false)
+        public async Task<List<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, out int total, bool tracking = false, CancellationToken cancellationToken = defaul)
+        {
+            var iquery = GetIQueryable();
+            if (noTracking)
+                iquery = iquery.AsNoTracking();
+            iquery = filter?.Invoke(iquery);
+            total = iquery.Count();
+            return iquery.Skip((page - 1) * pageSize).Take(pageSize);
+        }
+
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<TEntity> queryable = GetQueryable(tracking);
+            if (expression != null)
+                queryable = queryable.Where(expression);
+            
+            return await queryable.ToListAsync();
+        }
+
+        public virtual TEntity Get(long id, bool tracking = false)
         {
             IQueryable<TEntity> iQueryable = GetIQueryable().Where(m => m.Id == id);
             if (noTracking)
@@ -100,15 +124,7 @@ namespace Sdf.EF.Repositories
         {
             return GetIQueryable().Any(expression);
         }
-        public virtual IQueryable<TEntity> GetPageList(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, out int total, bool noTracking = false)
-        {
-            var iquery = GetIQueryable();
-            if (noTracking)
-                iquery = iquery.AsNoTracking();
-            iquery = filter?.Invoke(iquery);
-            total = iquery.Count();
-            return iquery.Skip((page - 1) * pageSize).Take(pageSize);
-        }
+        
         public virtual void Insert(TEntity entity)
         {
             Dbset.Add(entity);
