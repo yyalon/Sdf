@@ -11,10 +11,10 @@ namespace Sdf.Domain.Uow
 {
     public class UowInterceptor:IInterceptor
     {
-        private IUowManager uowManager;
+        private readonly IUowManager _uowManager;
         public UowInterceptor(IUowManager uowManager)
         {
-            this.uowManager = uowManager;
+            this._uowManager = uowManager;
         }
        
         private bool IsOperationResult(Type objectType)
@@ -51,7 +51,7 @@ namespace Sdf.Domain.Uow
         }
         public void Intercept(IInvocation invocation)
         {
-            var uow = uowManager.Begin();
+            var uow = _uowManager.Begin();
             invocation.Proceed();
 
             if (uow != null)

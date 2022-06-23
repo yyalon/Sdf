@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Sdf.Application.Dto;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Domain.Uow;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Sdf.EF.Repositories
 {
-    public class EFRepositoryLongKey<TEntity> : IEFRepositoryLongKey<TEntity> where TEntity : Entity<long> , new()
+    public class EFRepositoryLongKey<TEntity> : IEFRepositoryLongKey<TEntity> where TEntity : Entity<long>, new()
     {
         private EFDbContext _dbContext;
         public EFDbContext DbContext
@@ -73,80 +74,97 @@ namespace Sdf.EF.Repositories
             }
         }
 
-        public async Task<List<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, out int total, bool tracking = false, CancellationToken cancellationToken = defaul)
+        public virtual async Task<PageResult<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> selectFilter = null, bool tracking = false, CancellationToken cancellationToken = default)
         {
-            var iquery = GetIQueryable();
-            if (noTracking)
-                iquery = iquery.AsNoTracking();
-            iquery = filter?.Invoke(iquery);
-            total = iquery.Count();
-            return iquery.Skip((page - 1) * pageSize).Take(pageSize);
+            IQueryable<TEntity> queryable = GetQueryable(tracking);
+            queryable = filter?.Invoke(queryable);
+            var total = await queryable.CountAsync(cancellationToken: cancellationToken);
+            if (selectFilter != null)
+            {
+                queryable = selectFilter(queryable);
+            }
+            var items = await queryable.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken: cancellationToken);
+
+            return new PageResult<TEntity>(total, items, pageSize);
         }
 
-        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
+        public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> queryable = GetQueryable(tracking);
             if (expression != null)
                 queryable = queryable.Where(expression);
-            
-            return await queryable.ToListAsync();
+
+            return await queryable.ToListAsync(cancellationToken: cancellationToken);
         }
 
-        public virtual TEntity Get(long id, bool tracking = false)
+        public virtual async Task<TEntity> GetAsync(long id, bool tracking = false, CancellationToken cancellationToken = default)
         {
-            IQueryable<TEntity> iQueryable = GetIQueryable().Where(m => m.Id == id);
-            if (noTracking)
-                iQueryable = iQueryable.AsNoTracking();
-            return iQueryable.FirstOrDefault();
+            IQueryable<TEntity> queryable = GetQueryable(tracking);
+            queryable = queryable.Where(m => m.Id == id);
+
+            return await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
-        public virtual TEntity SelectFirse(Expression<Func<TEntity, bool>> expression, bool noTracking = false)
+        public virtual async Task<TEntity> GetAsync<TProperty>(long id, bool tracking = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, TProperty>> includeFilter = null, CancellationToken cancellationToken = default)
         {
+            IQueryable<TEntity> queryable = GetQueryable(tracking);
+            queryable = queryable.Where(m => m.Id == id);
+            queryable = includeFilter?.Invoke(queryable);
 
-            IQueryable<TEntity> iQueryable = GetIQueryable().Where(expression);
-            if (noTracking)
-                iQueryable = iQueryable.AsNoTracking();
-            return iQueryable.FirstOrDefault();
+            return await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
-        public virtual int Count(Expression<Func<TEntity, bool>> expression = null)
+        public virtual async Task<TEntity> SelectFirseAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
         {
-            if (expression == null)
-                return GetIQueryable().Count();
-            return GetIQueryable().Where(expression).Count();
+            IQueryable<TEntity> queryable = GetQueryable(tracking);
+            if (expression != null)
+                queryable = queryable.Where(expression);
+
+            return await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
-        public virtual long CountLong(Expression<Func<TEntity, bool>> expression = null)
+        public virtual async Task<int> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return GetIQueryable().Where(expression).LongCount();
+            IQueryable<TEntity> queryable = GetQueryable();
+            if (expression != null)
+                queryable = queryable.Where(expression);
+
+            return await queryable.Where(expression).CountAsync(cancellationToken);
         }
-        public virtual bool Any(Expression<Func<TEntity, bool>> expression)
+
+        public virtual async Task<long> CountLongAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return GetIQueryable().Any(expression);
+            IQueryable<TEntity> queryable = GetQueryable();
+            if (expression != null)
+                queryable = queryable.Where(expression);
+
+            return await queryable.Where(expression).LongCountAsync(cancellationToken);
+        }
+        public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            IQueryable<TEntity> queryable = GetQueryable();
+            if (expression != null)
+                queryable = queryable.Where(expression);
+
+            return await queryable.AnyAsync(cancellationToken);
         }
         
-        public virtual void Insert(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Dbset.Add(entity);
+           await Dbset.AddAsync(entity, cancellationToken);
         }
 
-        public virtual void InsertRange(IEnumerable<TEntity> list)
+        public virtual async Task InsertRangeAsync(IEnumerable<TEntity> list, CancellationToken cancellationToken = default)
         {
-            Dbset.AddRange(list);
+           await Dbset.AddRangeAsync(list, cancellationToken);
         }
 
-        public virtual void Update(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            var entityEntry = DbContext.GetDbContext().Entry<TEntity>(entity);
-            if (entityEntry == null)
-                return;
-            if (entityEntry != null || entityEntry.State != EntityState.Modified)
-            {
-                entityEntry.State = EntityState.Modified;
-            }
+            DbContext.GetDbContext().Update(entity);
+            await Task.CompletedTask;
         }
-
-        public virtual void Delete(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             if (entity is ISoftDelete)
             {
@@ -157,13 +175,14 @@ namespace Sdf.EF.Repositories
             {
                 Dbset.Remove(entity);
             }
+            await Task.CompletedTask;
         }
 
-        public virtual void Delete(long id)
+        public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             if (typeof(TEntity).IsAssignableFrom(typeof(ISoftDelete)))
             {
-                var entity=Get(id);
+                var entity = await GetAsync(id, true, cancellationToken);
                 ISoftDelete softDelete = entity as ISoftDelete;
                 softDelete.Delete();
             }
@@ -175,13 +194,13 @@ namespace Sdf.EF.Repositories
             }
         }
 
-        public virtual void RemoveRange(IEnumerable<TEntity> list)
+        public virtual async Task RemoveRange(IEnumerable<TEntity> list, CancellationToken cancellationToken = default)
         {
             if (list != null)
             {
                 foreach (var item in list)
                 {
-                    Delete(item);
+                   await DeleteAsync(item, cancellationToken);
                 }
             }
         }

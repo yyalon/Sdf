@@ -21,13 +21,11 @@ namespace Sdf.EF
         private DbContext _dbContext;
         private readonly ILog _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
-        private readonly ISerializer _serializer;
-        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler, ISerializer serializer)
+        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler)
         {
             _dbContext = dbContext;
             _logger = log;
             _dbChangeEventHandler = dbChangeEventHandler;
-            _serializer = serializer;
         }
         public void Dispose()
         {
@@ -43,15 +41,8 @@ namespace Sdf.EF
         {
             return _dbContext;
         }
-        //private DateTime GetDateTimeNow()
-        //{
-        //    using (var resolver = Bootstrapper.Instance.IocManager.GetResolver())
-        //    {
-        //        var dateTimeProvider = resolver.Resolve<IDateTimeProvider>();
-        //        return dateTimeProvider.GetNow();
-        //    }
-        //}
-        public DbChangeResult SaveChage()
+
+        public DbChangeResult SaveChageAsync()
         {
             
             var entrys = _dbContext.ChangeTracker.Entries();
