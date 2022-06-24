@@ -13,7 +13,7 @@ namespace Sdf.Redis
         {
             if (action == null)
                 throw new Exception("必须配置redis");
-            sdfConfig.Register.RegisterSingleton<RedisCacheOption>(resolver =>
+            sdfConfig.Register.RegisterSingleton(resolver =>
             {
                 return action(resolver);
             });

@@ -9,6 +9,5 @@ namespace Sdf.EF.Repositories
 {
     public interface IEFRepositoryStringKey<TEntity> : IEFRepository<TEntity, string> where TEntity : Entity<string>
     {
-        TEntity Get<TProperty>(string id, bool noTracking = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, TProperty>> includeFilter = null);
     }
 }

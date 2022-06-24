@@ -3,6 +3,8 @@ using Sdf.Domain.Uow;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.EF.Uow
 {
@@ -37,9 +39,9 @@ namespace Sdf.EF.Uow
 
         public event UowEventHandler Completed;
 
-        public DbChangeResult Complete()
+        public async Task<DbChangeResult> CompleteAsync(CancellationToken cancellationToken = default)
          {
-            DbChangeResult dbChangeResult= _dbContext.SaveChage();
+            DbChangeResult dbChangeResult=await _dbContext.SaveChageAsync(cancellationToken);
             isDisposed = true;
             Completed?.Invoke(this);
             return dbChangeResult;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf", "Sdf\Sdf.csproj", "{9F34B53C-8307-42EA-BA31-8E278E80C4DB}"
 EndProject
@@ -14,12 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.Redis", "Sdf.Redis\Sdf.Redis.csproj", "{D2A8F06D-CD9A-4119-AE4E-642B6A540B99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.EF", "Sdf.EF\Sdf.EF.csproj", "{8C7F04E5-82F7-460C-95A8-1C88A845BDBF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.Dapper", "Sdf.Dapper\Sdf.Dapper.csproj", "{873C0391-3D04-4A42-9A88-340CEEAFB2B9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.Dapper.SqlServer", "Sdf.Dapper.SqlServer\Sdf.Dapper.SqlServer.csproj", "{94FBC7FA-9FAF-4848-BB2D-5ECB3224ED5F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.Dapper.Mysql", "Sdf.Dapper.Mysql\Sdf.Dapper.Mysql.csproj", "{30E7949E-03C3-44EE-8F60-2CF179327FD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdf.NLogLogger", "Sdf.NLog\Sdf.NLogLogger.csproj", "{F0CD3D67-9980-46EF-9934-36E4A2151E7E}"
 EndProject
@@ -49,18 +43,6 @@ Global
 		{8C7F04E5-82F7-460C-95A8-1C88A845BDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C7F04E5-82F7-460C-95A8-1C88A845BDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C7F04E5-82F7-460C-95A8-1C88A845BDBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{873C0391-3D04-4A42-9A88-340CEEAFB2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{873C0391-3D04-4A42-9A88-340CEEAFB2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{873C0391-3D04-4A42-9A88-340CEEAFB2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{873C0391-3D04-4A42-9A88-340CEEAFB2B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94FBC7FA-9FAF-4848-BB2D-5ECB3224ED5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94FBC7FA-9FAF-4848-BB2D-5ECB3224ED5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94FBC7FA-9FAF-4848-BB2D-5ECB3224ED5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94FBC7FA-9FAF-4848-BB2D-5ECB3224ED5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30E7949E-03C3-44EE-8F60-2CF179327FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30E7949E-03C3-44EE-8F60-2CF179327FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30E7949E-03C3-44EE-8F60-2CF179327FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30E7949E-03C3-44EE-8F60-2CF179327FD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F0CD3D67-9980-46EF-9934-36E4A2151E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0CD3D67-9980-46EF-9934-36E4A2151E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0CD3D67-9980-46EF-9934-36E4A2151E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU

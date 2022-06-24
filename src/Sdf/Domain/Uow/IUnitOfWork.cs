@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.Domain.Uow
 {
@@ -9,7 +11,7 @@ namespace Sdf.Domain.Uow
     {
 
         event UowEventHandler Completed;
-        DbChangeResult Complete();
+        Task<DbChangeResult> CompleteAsync(CancellationToken cancellationToken = default);
         IUnitOfWork Outer { get; set; }
         bool IsDisposed { get; }
         IDbContext GetDbContext();

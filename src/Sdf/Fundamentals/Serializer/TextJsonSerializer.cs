@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Sdf.Fundamentals.Serializer
 {
@@ -16,23 +18,27 @@ namespace Sdf.Fundamentals.Serializer
         
         }
         public JsonSerializerOptions JsonSerializerOptions { get; set; }
-        public object Deserialize(string json)
+        
+        public async Task<object> DeserializeAsync(string json)
         {
-           return JsonSerializer.Deserialize(json,typeof(object), JsonSerializerOptions);
+            return await JsonSerializer.DeserializeAsync(new MemoryStream(Encoding.UTF8.GetBytes(json)), typeof(object), JsonSerializerOptions);
         }
 
-        public T Deserialize<T>(string json)
+        public async Task<T> DeserializeAsync<T>(string json)
         {
             if (string.IsNullOrEmpty(json))
             {
-                return default(T);
+                return default;
             }
-            return JsonSerializer.Deserialize<T>(json, JsonSerializerOptions);
+            return await JsonSerializer.DeserializeAsync<T>(new MemoryStream(Encoding.UTF8.GetBytes(json)), JsonSerializerOptions);
         }
 
-        public string Serialize(object value)
+        public async Task<string> SerializeAsync(object value)
         {
-            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+            using var stream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(stream, JsonSerializerOptions);
+            return Encoding.UTF8.GetString(stream.ToArray());
+
         }
     }
     sealed class JsonNonStringKeyDictionaryConverter<TKey, TValue> : JsonConverter<IDictionary<TKey, TValue>>

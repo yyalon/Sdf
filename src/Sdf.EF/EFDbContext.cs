@@ -1,18 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sdf.Common;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Exceptions;
-using Sdf.Fundamentals;
 using Sdf.Fundamentals.Logs;
-using Sdf.Fundamentals.Serializer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.EF
 {
@@ -42,7 +40,7 @@ namespace Sdf.EF
             return _dbContext;
         }
 
-        public DbChangeResult SaveChageAsync()
+        public async Task<DbChangeResult> SaveChageAsync(CancellationToken cancellationToken = default)
         {
             
             var entrys = _dbContext.ChangeTracker.Entries();
@@ -56,7 +54,6 @@ namespace Sdf.EF
                     if (item.Entity is IUpdateTimeField)
                     {
                         var updateTimeField = item.Entity as IUpdateTimeField;
-                        //GetDateTimeNow();
                         updateTimeField.UpdateTime = DateTime.Now;
                     }
                 }
@@ -78,7 +75,7 @@ namespace Sdf.EF
             }
             try
             {
-                int changeNum = _dbContext.SaveChanges();
+                int changeNum = await _dbContext.SaveChangesAsync(cancellationToken);
                 if (_dbChangeEventHandler.Disable)
                 {
                     if (changeNum > 0)

@@ -4,6 +4,8 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.Redis.Cache
 {
@@ -21,67 +23,70 @@ namespace Sdf.Redis.Cache
             get
             {
                 var connectionMultiplexer= StackExchangeRedisWrapper.GetConnectionMultiplexer(_redisCacheOption);
+
                 return connectionMultiplexer.GetDatabase(_redisCacheOption.DbNumber);
             }
         }
-        public void Clear()
+        public async Task ClearAsync()
         {
             var connectionMultiplexer = StackExchangeRedisWrapper.GetConnectionMultiplexer(_redisCacheOption);
             string[] redisArr = _redisCacheOption.Host.Split(',');
             foreach (var item in redisArr)
             {
                 var server = connectionMultiplexer.GetServer(item);
-                server.FlushDatabase(_redisCacheOption.DbNumber);
+                await server.FlushDatabaseAsync(_redisCacheOption.DbNumber);
             }
-            
         }
 
-        public object Get(string key)
+        public async Task<object> GetAsync(string key)
         {
-            string json = Database.StringGet(key);
+            string json = await Database.StringGetAsync(key);
             if (string.IsNullOrEmpty(json))
                 return null;
-            return _serializer.Deserialize(json);
+
+            return await _serializer.DeserializeAsync(json);
         }
 
-        public T Get<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
             
             string json = Database.StringGet(key);
             if (string.IsNullOrEmpty(json))
-                return default(T);
-            return _serializer.Deserialize<T>(json);
+                return default;
+
+            return await _serializer.DeserializeAsync<T>(json);
         }
 
-        public void Remove(string key)
+        public async Task RemoveAsync(string key)
         {
-            Database.KeyDelete(key);
+            await Database.KeyDeleteAsync(key);
         }
 
-        public void Set(string key, object value)
+        public async Task SetAsync(string key, object value)
         {
             TimeSpan? ts = _redisCacheOption.DefaultTimeSpan;
-            _Set(key, value, ts);
+            await InternalSet(key, value, ts);
         }
 
-        public void Set(string key, object value, DateTime absoluteExpiration)
+        public async Task SetAsync(string key, object value, DateTime absoluteExpiration)
         {
-            _Set(key, value, absoluteExpiration - DateTime.Now);
+            await InternalSet(key, value, absoluteExpiration - DateTime.Now);
         }
 
-        public void Set(string key, object value, TimeSpan slidingExpiration)
+        public async Task SetAsync(string key, object value, TimeSpan slidingExpiration)
         {
-            _Set(key, value, slidingExpiration);
+            await InternalSet(key, value, slidingExpiration);
         }
-        public bool KeyExists(string key)
+        public async Task<bool> KeyExistsAsync(string key)
         {
-            return Database.KeyExists(key);
+            return await Database.KeyExistsAsync(key);
         }
-        private void _Set(string key, object value, TimeSpan? slidingExpiration)
+        private async Task InternalSet(string key, object value, TimeSpan? slidingExpiration)
         {
-            string json = _serializer.Serialize(value);
-            Database.StringSet(key, json, slidingExpiration);
+            string json = await _serializer.SerializeAsync(value);
+            await Database.StringSetAsync(key, json, slidingExpiration);
         }
-       
+
+      
     }
 }
