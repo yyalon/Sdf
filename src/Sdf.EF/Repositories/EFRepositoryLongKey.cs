@@ -167,7 +167,7 @@ namespace Sdf.EF.Repositories
         
         public virtual IDbContext GetCurrentDbContext()
         {
-            return this.DbContext;
+            return DbContext;
         }
     }
 }
