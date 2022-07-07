@@ -9,10 +9,10 @@ namespace Sdf.Extensions
     public class SdfServiceContainer
     {
         public IServiceCollection Services { get; set; }
-        public IServiceProvider serviceProvider { get; private set; }
+        public IServiceProvider ServiceProvider { get; private set; }
         public void Initialize(Action<SdfConfigManager> action)
         {
-            serviceProvider = Services.AddSdf(action);
+            ServiceProvider = Services.AddSdf(action);
         }
     }
 }

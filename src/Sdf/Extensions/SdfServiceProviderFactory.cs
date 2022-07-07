@@ -12,7 +12,7 @@ namespace Sdf.Extensions
 
         public IServiceProvider CreateServiceProvider(SdfServiceContainer containerBuilder)
         {
-            return containerBuilder.serviceProvider;
+            return containerBuilder.ServiceProvider;
         }
     }
 }

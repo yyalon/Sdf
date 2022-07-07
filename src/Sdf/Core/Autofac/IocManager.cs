@@ -49,6 +49,7 @@ namespace Sdf.Core.Autofac
             AutofacBuilder.RegisterInstance(this).SingleInstance();
             AutofacBuilder.RegisterType<AutofacRegister>().As<IRegister>().SingleInstance();
             AutofacBuilder.RegisterType<UowManager>().As<IUowManager>().InstancePerLifetimeScope();
+            AutofacBuilder.RegisterType<UowInterceptorAsync>();
             AutofacBuilder.RegisterType<UowInterceptor>().InstancePerDependency();
             AutofacBuilder.RegisterType<ModuleManager>().SingleInstance();
             AutofacBuilder.RegisterType<DefaultLongIdProvider>().As<ILongIdProvider>();
