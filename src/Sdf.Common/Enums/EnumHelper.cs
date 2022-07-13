@@ -9,7 +9,7 @@ namespace Sdf.Common.Enums
     {
         public static List<EnumModel> GetEnumModels<TEnum>() where TEnum : Enum
         {
-            List<EnumModel> enumModels = new List<EnumModel>();
+            List<EnumModel> enumModels = new();
             Type enumType = typeof(TEnum);
             var values = Enum.GetValues(enumType);
             foreach (var item in values)
@@ -21,7 +21,7 @@ namespace Sdf.Common.Enums
                 {
                     label = customAttributes[0].Description;
                 }
-                EnumModel enumModel = new EnumModel()
+                EnumModel enumModel = new ()
                 {
                     EnumIndex = index,
                     EnumLabel = label
