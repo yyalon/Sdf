@@ -42,22 +42,39 @@ namespace Sdf.EF.Repositories
 
             return await queryable.ToListAsync(cancellationToken: cancellationToken);
         }
-
+        
         public virtual async Task<TEntity> GetAsync(long id, bool tracking = false, CancellationToken cancellationToken = default)
         {
+            if (TryGetCacheValue(id, out TEntity entity))
+            {
+                return entity;
+            }
+
             IQueryable<TEntity> queryable = GetQueryable(tracking);
             queryable = queryable.Where(m => m.Id == id);
 
-            return await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            entity= await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            
+            TryAddCache(entity);
+
+            return entity;
         }
 
         public virtual async Task<TEntity> GetAsync<TProperty>(long id, bool tracking = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, TProperty>> includeFilter = null, CancellationToken cancellationToken = default)
         {
+            if (TryGetCacheValue(id, out TEntity entity))
+            {
+                return entity;
+            }
+
             IQueryable<TEntity> queryable = GetQueryable(tracking);
             queryable = queryable.Where(m => m.Id == id);
             queryable = includeFilter?.Invoke(queryable);
 
-            return await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            entity = await queryable.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            TryAddCache(entity);
+
+            return entity;
         }
 
         public virtual async Task<TEntity> SelectFirseAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
@@ -98,11 +115,16 @@ namespace Sdf.EF.Repositories
         
         public virtual async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-           await Dbset.AddAsync(entity, cancellationToken);
+            TryAddCache(entity);
+            await Dbset.AddAsync(entity, cancellationToken);
         }
 
         public virtual async Task InsertRangeAsync(IEnumerable<TEntity> list, CancellationToken cancellationToken = default)
         {
+            foreach (var entity in list)
+            {
+                TryAddCache(entity);
+            }
            await Dbset.AddRangeAsync(list, cancellationToken);
         }
 
@@ -123,6 +145,7 @@ namespace Sdf.EF.Repositories
             {
                 Dbset.Remove(entity);
             }
+            TryRemoveCache(entity.Id);
             await Task.CompletedTask;
         }
 

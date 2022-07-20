@@ -30,6 +30,7 @@ namespace Sdf.EF.Repositories
             }
         }
         public virtual DbSet<TEntity> Dbset
+
         {
             get
             {
@@ -65,6 +66,31 @@ namespace Sdf.EF.Repositories
         public virtual IQueryable<TEntity> SetNoTracking()
         {
             return Dbset.AsQueryable();
+        }
+
+        public bool TryGetCacheValue(TPrimaryKey key, out TEntity value)
+        {
+            value = null;
+            if (_dbContext.TryGetCacheValue(MapCacheKey(key), out object obj))
+            {
+                value=(TEntity)obj;
+                return true;
+            }
+           
+            return false;
+        }
+        public bool TryAddCache(TEntity value)
+        {
+            return _dbContext.TryAddCache(MapCacheKey(value.Id), value);
+        }
+        public bool TryRemoveCache(TPrimaryKey key)
+        {
+            return _dbContext.TryRemoveCache(MapCacheKey(key));
+        }
+
+        private static string MapCacheKey(TPrimaryKey primaryKey)
+        { 
+            return primaryKey.ToString();
         }
     }
 }

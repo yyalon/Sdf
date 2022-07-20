@@ -4,8 +4,6 @@ using Sdf.Core;
 using Sdf.Core.Autofac;
 using Sdf.Modules;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sdf
 {

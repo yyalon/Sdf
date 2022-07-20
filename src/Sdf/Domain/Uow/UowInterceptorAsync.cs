@@ -141,7 +141,7 @@ namespace Sdf.Domain.Uow
         {
             if (obj != null && IsOperationResult(obj.GetType()))
             {
-                var pState = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.State)).FirstOrDefault();
+                var pState = obj.GetType().GetProperties().Where(m => m.Name == nameof(OperationResult.Success)).FirstOrDefault();
                 var stateValue = (bool)pState.GetValue(obj);
                 return stateValue;
             }

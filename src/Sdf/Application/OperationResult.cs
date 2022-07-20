@@ -7,26 +7,26 @@ namespace Sdf.Application
     public class OperationResult
     {
         public virtual string Msg { get;  set; }
-        public virtual bool State { get;  set; }
+        public virtual bool Success { get;  set; }
         //public bool IsHasNextOperation { get; set; }
         public virtual object Result { get; set; }
         public virtual List<object> ErrorList { get;  set; }
-        public OperationResult(string msg, bool state)
+        public OperationResult(string msg, bool success)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
         }
-        public OperationResult(string msg, bool state, object result)
+        public OperationResult(string msg, bool success, object result)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
             this.Result = result;
         }
   
-        public OperationResult(string msg, bool state, object result, List<object> errorList)
+        public OperationResult(string msg, bool success, object result, List<object> errorList)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
             this.Result = result;
             this.ErrorList = errorList;
         }
@@ -35,7 +35,7 @@ namespace Sdf.Application
             this.ErrorList = newOperationResult.ErrorList;
             this.Msg = newOperationResult.Msg;
             this.Result = newOperationResult.Result;
-            this.State = newOperationResult.State;
+            this.Success = newOperationResult.Success;
         }
         public OperationResult()
         {
@@ -44,12 +44,12 @@ namespace Sdf.Application
         public virtual void CreateDefaultSuccessResult(string msg)
         { 
             this.Msg=msg;
-            this.State = true;
+            this.Success = true;
         }
         public virtual void CreateDefaultFailedResult(string msg, List<object> errorList)
         {
             this.Msg = msg;
-            this.State = false;
+            this.Success = false;
             this.ErrorList=errorList;
         }
         /// <summary>
@@ -108,32 +108,32 @@ namespace Sdf.Application
         public static OperationResult DefaultFailedResult = new OperationResult("操作失败", false);
         public override string ToString()
         {
-            return $"state:{State} msg:{Msg}";
+            return $"Success:{Success} msg:{Msg}";
         }
     }
     public class OperationResult<T>
     {
         public string Msg { get; set; }
-        public bool State { get; set; }
+        public bool Success { get; set; }
 
         public  T Result { get; set; }
         public List<object> ErrorList { get; set; }
-        public OperationResult(string msg, bool state)
+        public OperationResult(string msg, bool success)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
         }
-        public OperationResult(string msg, bool state, T result)
+        public OperationResult(string msg, bool success, T result)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
             this.Result = result;
         }
 
-        public OperationResult(string msg, bool state, T result, List<object> errorList)
+        public OperationResult(string msg, bool success, T result, List<object> errorList)
         {
             this.Msg = msg;
-            this.State = state;
+            this.Success = success;
             this.Result = result;
             this.ErrorList = errorList;
         }
@@ -142,7 +142,7 @@ namespace Sdf.Application
             this.ErrorList = newOperationResult.ErrorList;
             this.Msg = newOperationResult.Msg;
             this.Result = newOperationResult.Result;
-            this.State = newOperationResult.State;
+            this.Success = newOperationResult.Success;
         }
         public OperationResult()
         {
@@ -150,7 +150,7 @@ namespace Sdf.Application
         }
         public OperationResult ToOperationResult()
         {
-            return new OperationResult(Msg, State, Result, ErrorList);
+            return new OperationResult(Msg, Success, Result, ErrorList);
         }
         /// <summary>
         /// 创建Success的OperationResult

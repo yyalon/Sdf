@@ -11,12 +11,14 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Sdf.EF
 {
     public class EFDbContext : IDbContext
     {
-        private DbContext _dbContext;
+        private readonly ConcurrentDictionary<string, object> Leve1CacheData = new();
+        private readonly DbContext _dbContext;
         private readonly ILog _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
         public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler)
@@ -27,6 +29,7 @@ namespace Sdf.EF
         }
         public void Dispose()
         {
+            Leve1CacheData.Clear();
             if (_dbContext != null) _dbContext.Dispose();
         }
 
@@ -39,10 +42,21 @@ namespace Sdf.EF
         {
             return _dbContext;
         }
-
+        public bool TryGetCacheValue(string key, out object value)
+        {
+            return Leve1CacheData.TryGetValue(key, out value);
+        }
+        public bool TryAddCache(string key, object value)
+        {
+            return Leve1CacheData.TryAdd(key, value);
+        }
+        public bool TryRemoveCache(string key)
+        {
+            return Leve1CacheData.TryRemove(key, out _);
+        }
         public async Task<DbChangeResult> SaveChageAsync(CancellationToken cancellationToken = default)
         {
-            
+
             var entrys = _dbContext.ChangeTracker.Entries();
             bool changeFlag = false;//默认没有更改
             List<ValidationResult> validationResults = new List<ValidationResult>();

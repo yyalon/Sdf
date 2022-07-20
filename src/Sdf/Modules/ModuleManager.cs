@@ -70,7 +70,7 @@ namespace Sdf.Modules
         {
             foreach (var module in ModuleInstanceList)
             {
-                module.Initialize(_register, new Mapper.MapperProvider());
+                module.Initialize(_register);
             }
         }
        
