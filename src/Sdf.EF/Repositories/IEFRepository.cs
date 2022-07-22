@@ -20,7 +20,7 @@ namespace Sdf.EF.Repositories
         DbSet<TEntity> SetTracking();
         IQueryable<TEntity> SetNoTracking();
 
-        Task<PageResult<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> selectFilter = null, bool tracking = false, CancellationToken cancellationToken = default);
+        Task<PageResult<TResult>> GetPageListAsync<TResult>(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, Expression<Func<TEntity, TResult>> selector, bool tracking = false, CancellationToken cancellationToken = default);
         Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default);
         Task<TEntity> GetAsync(TPrimaryKey id, bool tracking = false, CancellationToken cancellationToken = default);
         Task<TEntity> GetAsync<TProperty>(TPrimaryKey id, bool tracking = false, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, TProperty>> includeFilter = null, CancellationToken cancellationToken = default);
