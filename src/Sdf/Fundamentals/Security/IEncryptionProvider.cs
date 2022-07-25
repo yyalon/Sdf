@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sdf.Fundamentals.Security
 {
-    public interface IDESProvider
+    public interface IEncryptionProvider
     {
         /// <summary>
         ///  加密

@@ -1,16 +1,14 @@
 ﻿using Sdf.Common;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Sdf.Fundamentals.Security
 {
-    public class TripleDES : IDESProvider
+    public class TripleDESEncryptionProvider : IEncryptionProvider
     {
 
-        public TripleDES()
+        public TripleDESEncryptionProvider()
         {
             
         }
@@ -24,7 +22,7 @@ namespace Sdf.Fundamentals.Security
         /// <returns>Base64的加密字符串</returns>
         public string Encrypt(string text, string key = null)
         {
-            byte[] resultArray = _Encrypt(text, key);
+            byte[] resultArray = InternalEncrypt(text, key);
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
        
@@ -37,19 +35,19 @@ namespace Sdf.Fundamentals.Security
         {
             encryptedText = encryptedText.Replace(' ', '+');
             byte[] inputArray = Convert.FromBase64String(encryptedText);
-            byte[] resultArray = _Decrypt(inputArray, key);
+            byte[] resultArray = InternalDecrypt(inputArray, key);
             return Encoding.UTF8.GetString(resultArray);
         }
         public string EncryptToNumber(string text, string key = null)
         {
-            byte[] resultArray = _Encrypt(text, key);
-            StringBuilder stringBuilder = new StringBuilder(resultArray.Length);
+            byte[] resultArray = InternalEncrypt(text, key);
+            StringBuilder stringBuilder = new(resultArray.Length);
             int i = 0;
             foreach (var item in resultArray)
             {
                 if (i == 0)
                 {
-                    stringBuilder.Append(item.ToString());
+                    stringBuilder.Append(item);
                 }
                 else
                 {
@@ -67,14 +65,14 @@ namespace Sdf.Fundamentals.Security
             {
                 inputArray[i] = (byte)(arr[i].ToInt());
             }
-            byte[] resultArray = _Decrypt(inputArray, key);
+            byte[] resultArray = InternalDecrypt(inputArray, key);
             return Encoding.UTF8.GetString(resultArray);
         }
-        private byte[] _Encrypt(string text, string key = null)
+        private byte[] InternalEncrypt(string text, string key = null)
         {
             byte[] inputArray = Encoding.UTF8.GetBytes(text);
-            var tripleDES = System.Security.Cryptography.TripleDES.Create();
-            var byteKey = Encoding.UTF8.GetBytes(key != null ? key : DefaultCryptoKey);
+            var tripleDES = TripleDES.Create();
+            var byteKey = Encoding.UTF8.GetBytes(key ?? DefaultCryptoKey);
             byte[] allKey = new byte[24];
             Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
             Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
@@ -85,10 +83,10 @@ namespace Sdf.Fundamentals.Security
             byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
             return resultArray;
         }
-        private byte[] _Decrypt(byte[] inputArray, string key = null)
+        private byte[] InternalDecrypt(byte[] inputArray, string key = null)
         {
-            var tripleDES = System.Security.Cryptography.TripleDES.Create();
-            var byteKey = Encoding.UTF8.GetBytes(key != null ? key : DefaultCryptoKey);
+            var tripleDES = TripleDES.Create();
+            var byteKey = Encoding.UTF8.GetBytes(key ?? DefaultCryptoKey);
             byte[] allKey = new byte[24];
             Buffer.BlockCopy(byteKey, 0, allKey, 0, 16);
             Buffer.BlockCopy(byteKey, 0, allKey, 16, 8);
