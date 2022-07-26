@@ -17,7 +17,7 @@ namespace Sdf.EF
 {
     public class EFDbContext : IDbContext
     {
-        private readonly ConcurrentDictionary<string, object> Leve1CacheData = new();
+        public readonly ConcurrentDictionary<string, object> Leve1CacheData = new();
         private readonly DbContext _dbContext;
         private readonly ILog _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
