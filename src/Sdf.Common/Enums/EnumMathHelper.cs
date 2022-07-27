@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdf.Common.Enums
 {
     public static class EnumMathHelper
     {
+        public static TEnum MergeEnumType<TEnum>(List<TEnum> enumTypes) where TEnum : struct, Enum
+        {
+            var fisrt = enumTypes.FirstOrDefault();
+            foreach (var enumType in enumTypes)
+            {
+                fisrt= AddEnumType(fisrt, enumType);
+            }
+
+            return fisrt;
+        }
+
         public static TEnum AddEnumType<TEnum>(TEnum sourceEnumType, TEnum removeEnumType) where TEnum : struct, Enum
         {
             var result = Convert.ToInt16(sourceEnumType) | Convert.ToInt16(removeEnumType);
