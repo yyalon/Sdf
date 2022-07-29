@@ -19,19 +19,16 @@ namespace Sdf.EF.Repositories
         {
          
         }
-
-        public virtual async Task<PageResult<TEntity>> GetPageListAsync(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> selectFilter = null, bool tracking = false, CancellationToken cancellationToken = default)
+        
+        public virtual async Task<PageResult<TResult>> GetPageListAsync<TResult>(int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>> filter, Expression<Func<TEntity, TResult>> selector, bool tracking = false, CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> queryable = GetQueryable(tracking);
             queryable = filter?.Invoke(queryable);
             var total = await queryable.CountAsync(cancellationToken: cancellationToken);
-            if (selectFilter != null)
-            {
-                queryable = selectFilter(queryable);
-            }
-            var items = await queryable.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken: cancellationToken);
+            
+            var items = await queryable.Skip((page - 1) * pageSize).Take(pageSize).Select(selector).ToListAsync(cancellationToken: cancellationToken);
 
-            return new PageResult<TEntity>(total, items, pageSize);
+            return new PageResult<TResult>(total, items, pageSize);
         }
 
         public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression, bool tracking = false, CancellationToken cancellationToken = default)
@@ -192,5 +189,6 @@ namespace Sdf.EF.Repositories
         {
             return DbContext;
         }
+
     }
 }
