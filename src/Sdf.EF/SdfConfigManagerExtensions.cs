@@ -14,7 +14,7 @@ namespace Sdf.EF
     {
         public static SdfConfigManager UseEF<TDbContext>(this SdfConfigManager sdfConfig, DbContextOptions contextOption) where TDbContext:DbContext
         {
-            sdfConfig.Register.RegisterSingleton<DbContextOptions>(contextOption);
+            sdfConfig.Register.RegisterSingleton(contextOption);
             sdfConfig.Register.RegisterTransient<DbContext, TDbContext>();
             sdfConfig.Register.RegisterTransient<IDbContext, EFDbContext>();
             sdfConfig.Register.RegisterTransient<IUnitOfWork, EfUnitOfWork>();
@@ -22,7 +22,7 @@ namespace Sdf.EF
         }
         public static SdfConfigManager UseEF<TDbContext>(this SdfConfigManager sdfConfig, Func<IResolver, DbContextOptions> contextOption) where TDbContext : DbContext
         {
-            sdfConfig.Register.RegisterSingleton<DbContextOptions>(contextOption);
+            sdfConfig.Register.RegisterSingleton(contextOption);
             sdfConfig.Register.RegisterTransient<DbContext, TDbContext>();
             sdfConfig.Register.RegisterTransient<IDbContext, EFDbContext>();
             sdfConfig.Register.RegisterTransient<IUnitOfWork, EfUnitOfWork>();
