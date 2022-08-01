@@ -81,11 +81,11 @@ namespace Sdf.EF.Repositories
         }
         public bool TryAddCache(TEntity value)
         {
-            return _dbContext.TryAddCache(MapCacheKey(value.Id), value);
+            return DbContext.TryAddCache(MapCacheKey(value.Id), value);
         }
         public bool TryRemoveCache(TPrimaryKey key)
         {
-            return _dbContext.TryRemoveCache(MapCacheKey(key));
+            return DbContext.TryRemoveCache(MapCacheKey(key));
         }
 
         private static string MapCacheKey(TPrimaryKey primaryKey)
