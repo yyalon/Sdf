@@ -71,7 +71,7 @@ namespace Sdf.EF.Repositories
         public bool TryGetCacheValue(TPrimaryKey key, out TEntity value)
         {
             value = null;
-            if (_dbContext.TryGetCacheValue(MapCacheKey(key), out object obj))
+            if (DbContext.TryGetCacheValue(MapCacheKey(key), out object obj))
             {
                 value=(TEntity)obj;
                 return true;
