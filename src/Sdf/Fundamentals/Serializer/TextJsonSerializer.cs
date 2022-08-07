@@ -36,7 +36,7 @@ namespace Sdf.Fundamentals.Serializer
         public async Task<string> SerializeAsync(object value)
         {
             using var stream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(stream, JsonSerializerOptions);
+            await JsonSerializer.SerializeAsync(stream, value, JsonSerializerOptions);
             return Encoding.UTF8.GetString(stream.ToArray());
 
         }
