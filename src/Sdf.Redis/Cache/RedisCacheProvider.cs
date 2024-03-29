@@ -18,15 +18,17 @@ namespace Sdf.Redis.Cache
             _serializer = serializer;
             _redisCacheOption = redisCacheOption;
         }
+
         private IDatabase Database
         {
             get
             {
                 var connectionMultiplexer= StackExchangeRedisWrapper.GetConnectionMultiplexer(_redisCacheOption);
-
+                
                 return connectionMultiplexer.GetDatabase(_redisCacheOption.DbNumber);
             }
         }
+
         public async Task ClearAsync()
         {
             var connectionMultiplexer = StackExchangeRedisWrapper.GetConnectionMultiplexer(_redisCacheOption);
@@ -77,16 +79,35 @@ namespace Sdf.Redis.Cache
         {
             await InternalSet(key, value, slidingExpiration);
         }
+
         public async Task<bool> KeyExistsAsync(string key)
         {
             return await Database.KeyExistsAsync(key);
         }
+
+        public async Task<IEnumerable<string>> KeysAsync(string pattern)
+        {
+            var connectionMultiplexer = StackExchangeRedisWrapper.GetConnectionMultiplexer(_redisCacheOption);
+            var servers = connectionMultiplexer.GetServers();
+
+            var allKeys = new HashSet<string>();
+            foreach (var server in servers)
+            {
+                var keys = server.KeysAsync(_redisCacheOption.DbNumber, pattern);
+
+                await foreach (var item in keys)
+                {
+                    allKeys.Add(item);
+                }
+            }
+
+            return allKeys;
+        }
+
         private async Task InternalSet(string key, object value, TimeSpan? slidingExpiration)
         {
             string json = await _serializer.SerializeAsync(value);
             await Database.StringSetAsync(key, json, slidingExpiration);
         }
-
-      
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Sdf.Common
 {
@@ -11,6 +9,11 @@ namespace Sdf.Common
         {
             try
             {
+                if (enumValue == null) 
+                {
+                    return string.Empty;
+                }
+
                 Type enumType = enumValue.GetType();
                 object o = Enum.Parse(enumType, enumValue.ToString());
 

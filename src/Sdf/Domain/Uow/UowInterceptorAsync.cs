@@ -1,7 +1,7 @@
 ﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.Logging;
 using Sdf.Application;
 using Sdf.Domain.Db;
-using Sdf.Fundamentals.Logs;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +10,10 @@ namespace Sdf.Domain.Uow
 {
     public class UowInterceptorAsync : IAsyncInterceptor
     {
-        private readonly ILog _log;
+        private readonly ILogger<UowInterceptorAsync> _log;
         private readonly IUowManager _uowManager;
 
-        public UowInterceptorAsync(IUowManager uowManager, ILog log)
+        public UowInterceptorAsync(IUowManager uowManager, ILogger<UowInterceptorAsync> log)
         {
             _uowManager = uowManager;
             _log = log;

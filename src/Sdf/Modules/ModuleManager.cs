@@ -1,17 +1,16 @@
-﻿using Sdf.Core;
-using Sdf.Core.Autofac;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Sdf.Core;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using System.Linq;
-using Microsoft.AspNetCore.Builder;
+using System.Reflection;
 
 namespace Sdf.Modules
 {
     public class ModuleManager
     {
-        private IRegister _register;
+        private readonly IRegister _register;
         public ModuleManager(IRegister register)
         {
             _register = register;
@@ -35,34 +34,26 @@ namespace Sdf.Modules
             }
 
         }
-        internal void LoadModule()
+        internal void LoadModule(IServiceCollection services)
         {
-            List<object> moduleList = new List<object>();
-            try
+            var moduleList = new List<object>();
+            foreach (var assembly in ModuleAssemblyList)
             {
-
-                foreach (var assembly in ModuleAssemblyList)
+                var types = assembly.GetTypes();
+                foreach (var type in types)
                 {
-                    var types = assembly.GetTypes();
-                    foreach (var type in types)
+                    if (IsModule(type, 0))
                     {
-                        if (IsModule(type, 0))
-                        {
-                            moduleList.Add(assembly.CreateInstance(type.FullName));
-                        }
+                        moduleList.Add(assembly.CreateInstance(type.FullName));
                     }
-
                 }
-            }
-            catch (Exception ex)
-            {
 
-                throw ex;
             }
             moduleList = moduleList.Distinct().ToList();
             foreach (var moduleItem in moduleList)
             {
                 var module = (ModuleBase)moduleItem;
+                module.SetServiceCollection(services);
                 ModuleInstanceList.Add(module);
             }
         }

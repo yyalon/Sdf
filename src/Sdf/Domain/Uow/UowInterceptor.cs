@@ -1,12 +1,4 @@
 ﻿using Castle.DynamicProxy;
-using Sdf.Application;
-using Sdf.Common;
-using Sdf.Domain.Db;
-using Sdf.Fundamentals.Logs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sdf.Domain.Uow
 {

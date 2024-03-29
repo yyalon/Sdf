@@ -3,14 +3,12 @@ using Autofac.Extras.DynamicProxy;
 using Sdf.Domain.Application;
 using Sdf.Domain.Db;
 using Sdf.Domain.Uow;
-using Sdf.Fundamentals;
 using Sdf.IdProvider;
 using Sdf.IdProvider.Default;
 using Sdf.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Sdf.Core.Autofac
 {
@@ -66,7 +64,7 @@ namespace Sdf.Core.Autofac
         }
         internal bool IsRegisted<TService>(string name = null) where TService : class
         {
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 return RegistrationBuilders.Any(m => m.TServer.FullName.ToLower() == typeof(TService).FullName.ToLower());
             }

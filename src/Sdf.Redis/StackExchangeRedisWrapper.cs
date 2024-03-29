@@ -1,37 +1,35 @@
 ﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Sdf.Redis
 {
     public class StackExchangeRedisWrapper
     {
-        private readonly static object lockObject = new object();
+        private readonly static object lockObject = new();
 
-        private static Dictionary<string, ConnectionMultiplexer> ConnectionMultiplexerDic = new Dictionary<string, ConnectionMultiplexer>();
+        private static readonly Dictionary<string, ConnectionMultiplexer> ConnectionMultiplexerDic = new();
         public static ConnectionMultiplexer GetConnectionMultiplexer(RedisConnectionOption redisConnection)
         {
             if (redisConnection == null)
             {
                 throw new Exception("Redis没有正确配置");
             }
-            ConnectionMultiplexer connectionMultiplexer = null;
-            if (!ConnectionMultiplexerDic.TryGetValue(redisConnection.Host, out connectionMultiplexer))
+            if (!ConnectionMultiplexerDic.TryGetValue(redisConnection.Host, out ConnectionMultiplexer connectionMultiplexer))
             {
                 lock (lockObject)
                 {
                     if (!ConnectionMultiplexerDic.TryGetValue(redisConnection.Host, out connectionMultiplexer))
                     {
-                        if (String.IsNullOrEmpty(redisConnection.Host))
+                        if (string.IsNullOrEmpty(redisConnection.Host))
                             throw new Exception("Redis没有正确配置");
-                        ConfigurationOptions option = new ConfigurationOptions();
+                        var option = new ConfigurationOptions();
                         string[] redisArr = redisConnection.Host.Split(',');
                         foreach (var item in redisArr)
                         {
                             option.EndPoints.Add(item);
                         }
-                        if (!String.IsNullOrEmpty(redisConnection.Password))
+                        if (!string.IsNullOrEmpty(redisConnection.Password))
                         {
                             option.Password = redisConnection.Password;
                         }

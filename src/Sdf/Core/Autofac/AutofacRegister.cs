@@ -130,7 +130,7 @@ namespace Sdf.Core.Autofac
             var registration = _builder.RegisterType<TImpl>().As<TService>().SingleInstance();
             if (!String.IsNullOrEmpty(name))
             {
-                registration.Named(name, typeof(TImpl));
+                registration = registration.Named(name, typeof(TService));
             }
             Add(registration, IsClassInterceptors(typeof(TImpl), typeof(TService)), typeof(TService), typeof(TImpl), name);
         }

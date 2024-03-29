@@ -134,8 +134,7 @@ namespace Sdf.EF.Repositories
             }
             else
             {
-                var entity = new TEntity();
-                entity.SetId(id);
+                var entity = await GetAsync(id, true, cancellationToken);
                 Dbset.Remove(entity);
             }
         }

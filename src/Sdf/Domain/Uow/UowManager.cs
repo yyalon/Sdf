@@ -2,8 +2,6 @@
 using Sdf.Domain.Db;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 using System.Transactions;
 
 namespace Sdf.Domain.Uow
@@ -26,8 +24,7 @@ namespace Sdf.Domain.Uow
         public IUnitOfWork Begin(UnitOfWorkOption option = null)
         {
             IUnitOfWork current = null;
-            if (option == null)
-                option = new UnitOfWorkOption() { Scope = TransactionScopeOption.Required };
+            option ??= new UnitOfWorkOption() { Scope = TransactionScopeOption.Required };
 
             if (option.Scope == TransactionScopeOption.Required && (Currnet == null || Currnet.IsDisposed))
             {

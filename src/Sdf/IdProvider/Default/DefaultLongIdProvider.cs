@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sdf.IdProvider.Default
+﻿namespace Sdf.IdProvider.Default
 {
     public class DefaultLongIdProvider : ILongIdProvider
     {

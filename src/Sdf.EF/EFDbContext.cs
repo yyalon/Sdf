@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Sdf.Common;
 using Sdf.Domain.Db;
 using Sdf.Domain.Entities;
 using Sdf.Exceptions;
-using Sdf.Fundamentals.Logs;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace Sdf.EF
 {
@@ -19,9 +19,9 @@ namespace Sdf.EF
     {
         public readonly ConcurrentDictionary<string, object> Leve1CacheData = new();
         private readonly DbContext _dbContext;
-        private readonly ILog _logger;
+        private readonly ILogger<EFDbContext> _logger;
         private IDbChangeEventHandler _dbChangeEventHandler;
-        public EFDbContext(DbContext dbContext, ILog log, IDbChangeEventHandler dbChangeEventHandler)
+        public EFDbContext(DbContext dbContext, ILogger<EFDbContext> log, IDbChangeEventHandler dbChangeEventHandler)
         {
             _dbContext = dbContext;
             _logger = log;

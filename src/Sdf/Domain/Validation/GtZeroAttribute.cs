@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sdf.Domain.Validation
 {
@@ -14,13 +11,12 @@ namespace Sdf.Domain.Validation
         public override bool IsValid(object value)
         {
             string valueStr = value.ToString();
-            try
+
+            if (double.TryParse(valueStr, out double num))
             {
-                double num = 0d;
-                Double.TryParse(valueStr,out num);
                 return num > 0;
             }
-            catch { }
+
             return false;
         }
     }

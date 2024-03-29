@@ -156,8 +156,7 @@ namespace Sdf.EF.Repositories
             }
             else
             {
-                var entity = new TEntity();
-                entity.SetId(id);
+                var entity = await GetAsync(id, true, cancellationToken);
                 Dbset.Remove(entity);
             }
         }
@@ -172,15 +171,15 @@ namespace Sdf.EF.Repositories
                 }
             }
         }
-        
+
         public virtual async Task RemoveRangeAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            var list = GetQueryable().Where(expression).Select(m=>new TEntity() {  Id=m.Id}).ToList();
+            var list = GetQueryable().Where(expression).Select(m => new TEntity() { Id = m.Id }).ToList();
             if (list != null)
             {
                 foreach (var item in list)
                 {
-                   await RemoveAsync(item, cancellationToken);
+                    await RemoveAsync(item, cancellationToken);
                 }
             }
         }

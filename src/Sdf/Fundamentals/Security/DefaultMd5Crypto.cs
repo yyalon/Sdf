@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdf.Fundamentals.Security
 {
     public class DefaultMd5Crypto : IMd5Crypto
     {
-        public string Md5crypto32(string str)
+        public async Task<string> Md5crypto32Async(string str, CancellationToken cancellationToken)
         {
-            if (String.IsNullOrEmpty(str))
+            if (string.IsNullOrEmpty(str))
                 return null;
-            return ComputeMd5(Encoding.Default.GetBytes(str));
+
+            return await ComputeMd5Async(Encoding.Default.GetBytes(str), cancellationToken);
         }
-        public string ComputeMd5(byte[]  bytes)
+
+        public async Task<string> ComputeMd5Async(byte[]  bytes, CancellationToken cancellationToken)
         {
-            MD5CryptoServiceProvider md5Hasher = new MD5CryptoServiceProvider();
-            byte[] data = md5Hasher.ComputeHash(bytes);
-            StringBuilder sBuilder = new StringBuilder();
+            using var md5Hasher = MD5.Create();
+            using var stream=new MemoryStream(bytes);
+            byte[] data =await md5Hasher.ComputeHashAsync(stream, cancellationToken);
+            var sBuilder = new StringBuilder();
             for (int i = 0; i < data.Length; i++)
             {
                 sBuilder.Append(data[i].ToString("x2"));
             }
+
             return sBuilder.ToString();
         }
     }

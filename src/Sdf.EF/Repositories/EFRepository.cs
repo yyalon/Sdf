@@ -17,9 +17,9 @@ namespace Sdf.EF.Repositories
                 {
                     if (_uowManager.Currnet == null)
                         throw new Exception("DbContext is null");
-                    var dbContext = _uowManager.Currnet.GetDbContext() as EFDbContext;
-                    if (dbContext == null)
+                    if (_uowManager.Currnet.GetDbContext() is not EFDbContext dbContext)
                         throw new Exception("DbContext is null");
+
                     return dbContext;
                 }
                 return _dbContext;
@@ -35,9 +35,8 @@ namespace Sdf.EF.Repositories
             get
             {
                 var dbSet = DbContext.GetDbContext().Set<TEntity>();
-                if (dbSet == null)
-                    throw new Exception("Dbset is null");
-                return dbSet;
+
+                return dbSet ?? throw new Exception("Dbset is null");
             }
         }
         protected IUowManager _uowManager;
@@ -65,7 +64,7 @@ namespace Sdf.EF.Repositories
 
         public virtual IQueryable<TEntity> SetNoTracking()
         {
-            return Dbset.AsQueryable();
+            return Dbset.AsNoTracking().AsQueryable();
         }
 
         public bool TryGetCacheValue(TPrimaryKey key, out TEntity value)
@@ -81,6 +80,10 @@ namespace Sdf.EF.Repositories
         }
         public bool TryAddCache(TEntity value)
         {
+            if (value == null)
+            {
+                return false;
+            }
             return DbContext.TryAddCache(MapCacheKey(value.Id), value);
         }
         public bool TryRemoveCache(TPrimaryKey key)

@@ -37,18 +37,19 @@ namespace Sdf
             ModuleManager = new ModuleManager(new AutofacRegister(IocManager));
         }
        
-        public void Initialize(Action<SdfConfigManager> action)
-        {
-            configManager = new SdfConfigManager(new AutofacRegister(IocManager));
-            action(configManager);
-            if (ModuleManager.ModuleList.Count == 0)
-                throw new Exception("最少注册一个模块");
-            ModuleManager.LoadModule();
-            ModuleManager.Initialize();
-            IocManager.RegisteCore();
-            IocManager.RegisteCompleted();
+        //public void Initialize(Action<SdfConfigManager> action)
+        //{
+        //    configManager = new SdfConfigManager(new AutofacRegister(IocManager));
+        //    action(configManager);
+        //    if (ModuleManager.ModuleList.Count == 0)
+        //        throw new Exception("最少注册一个模块");
+        //    ModuleManager.LoadModule();
+        //    ModuleManager.Initialize();
+        //    IocManager.RegisteCore();
+        //    IocManager.RegisteCompleted();
 
-        }
+        //}
+
         public IServiceProvider Initialize(IServiceCollection services, Action<SdfConfigManager> action)
         {
             configManager = new SdfConfigManager(new AutofacRegister(IocManager), services);
@@ -56,11 +57,12 @@ namespace Sdf
 
             //if (ModuleManager.ModuleList.Count == 0)
             //    throw new Exception("最少注册一个模块");
-            ModuleManager.LoadModule();
+            ModuleManager.LoadModule(services);
             ModuleManager.Initialize();
             IocManager.AutofacBuilder.Populate(services);
             IocManager.RegisteCore();
             IocManager.RegisteCompleted();
+
             return new AutofacServiceProvider(IocManager.Container);
         }
     }

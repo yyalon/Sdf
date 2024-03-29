@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sdf.Common.Enums
+﻿namespace Sdf.Common.Enums
 {
     public class EnumModel
     {

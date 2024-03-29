@@ -7,15 +7,19 @@ namespace Sdf.Application
     public class OperationResult
     {
         public virtual string Msg { get;  set; }
+        
         public virtual bool Success { get;  set; }
-        //public bool IsHasNextOperation { get; set; }
+
         public virtual object Result { get; set; }
+        
         public virtual List<object> ErrorList { get;  set; }
+        
         public OperationResult(string msg, bool success)
         {
             this.Msg = msg;
             this.Success = success;
         }
+
         public OperationResult(string msg, bool success, object result)
         {
             this.Msg = msg;
@@ -101,17 +105,18 @@ namespace Sdf.Application
         /// <summary>
         /// 默认的成功操作结果
         /// </summary>
-        public static OperationResult DefaultSuccessResult = new OperationResult("操作成功", true);
+        public static OperationResult DefaultSuccessResult = new("操作成功", true);
         /// <summary>
         /// 默认的失败操作结果
         /// </summary>
-        public static OperationResult DefaultFailedResult = new OperationResult("操作失败", false);
+        public static OperationResult DefaultFailedResult = new("操作失败", false);
+
         public override string ToString()
         {
             return $"Success:{Success} msg:{Msg}";
         }
     }
-    public class OperationResult<T>
+    public class OperationResult<T>: OperationResult
     {
         public string Msg { get; set; }
         public bool Success { get; set; }
@@ -201,11 +206,11 @@ namespace Sdf.Application
         /// <summary>
         /// 默认的成功操作结果
         /// </summary>
-        public static OperationResult<T> DefaultSuccessResult = new OperationResult<T>("操作成功", true);
+        public static new OperationResult<T> DefaultSuccessResult = new("操作成功", true);
         /// <summary>
         /// 默认的失败操作结果
         /// </summary>
-        public static OperationResult<T> DefaultFailedResult = new OperationResult<T>("操作失败", false);
+        public static new OperationResult<T> DefaultFailedResult = new("操作失败", false);
 
 
     }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sdf.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sdf.Extensions
 {

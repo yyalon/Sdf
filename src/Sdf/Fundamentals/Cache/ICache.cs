@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sdf.Fundamentals.Cache
@@ -57,5 +55,12 @@ namespace Sdf.Fundamentals.Cache
         /// <param name="key"></param>
         /// <returns></returns>
         Task<bool> KeyExistsAsync(string key);
+
+        /// <summary>
+        /// 模糊查询keys
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> KeysAsync(string pattern);
     }
 }

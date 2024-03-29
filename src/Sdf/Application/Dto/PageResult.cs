@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Sdf.Application.Dto
 {
@@ -9,6 +7,7 @@ namespace Sdf.Application.Dto
         public int Total { get; set; }
         public List<T> Items { get; set; }
         public object Other { get; set; }
+
         private int pageSize;
         public int MaxPage
         {
@@ -17,9 +16,9 @@ namespace Sdf.Application.Dto
                 if (pageSize == 0)
                     return 0;
                 if (Total % pageSize == 0)
-                    return (int)(Total / pageSize);
+                    return (Total / pageSize);
                 else
-                    return (int)(Total / pageSize) + 1;
+                    return (Total / pageSize) + 1;
             }
         }
         public PageResult(int total, List<T> items)
@@ -53,5 +52,51 @@ namespace Sdf.Application.Dto
         {
             return new PageResult<T>(0, null);
         }
+    }
+    public class PageResult
+    {
+        public int Total { get; set; }
+        public object Items { get; set; }
+        public object Other { get; set; }
+        private readonly int pageSize;
+        public int MaxPage
+        {
+            get
+            {
+                if (pageSize == 0)
+                    return 0;
+                if (Total % pageSize == 0)
+                    return (Total / pageSize);
+                else
+                    return (Total / pageSize) + 1;
+            }
+        }
+        public PageResult(int total, object items)
+        {
+            this.Total = total;
+            this.Items = items;
+
+        }
+        public PageResult(int total, object items, int pageSize)
+        {
+            this.Total = total;
+            this.Items = items;
+            this.pageSize = pageSize;
+        }
+        public PageResult(int total, object items, object other)
+        {
+            this.Total = total;
+            this.Items = items;
+            this.Other = other;
+        }
+        public PageResult(int total, object items, int pageSize, object other)
+        {
+            this.Total = total;
+            this.Items = items;
+            this.Other = other;
+            this.pageSize = pageSize;
+        }
+        public PageResult()
+        { }
     }
 }
