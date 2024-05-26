@@ -152,7 +152,7 @@ namespace Sdf.EF.Repositories
 
         public virtual async Task RemoveRangeAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            var list = GetQueryable().Where(expression).Select(m => new TEntity() { Id = m.Id }).ToList();
+            var list = GetQueryable(true).Where(expression).ToList();
             if (list != null)
             {
                 foreach (var item in list)

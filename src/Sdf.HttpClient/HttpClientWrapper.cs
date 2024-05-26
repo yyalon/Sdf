@@ -27,15 +27,24 @@ namespace Sdf.Http
 
         public async Task<HttpResult<TResult>> PostJsonAsync<TResult>(string url, object data, CancellationToken cancellationToken)
         {
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+            try
+            {
+                var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
 
-            var json =await _serializer.SerializeAsync(data);
-            var postContent = new StringContent(json, Encoding.UTF8);
-            postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            httpRequest.Content = postContent;
-            var response = await InternalHttpClient.SendAsync(httpRequest, cancellationToken: cancellationToken);
+                var json = await _serializer.SerializeAsync(data);
+                var postContent = new StringContent(json, Encoding.UTF8);
+                postContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                httpRequest.Content = postContent;
+                var response = await InternalHttpClient.SendAsync(httpRequest, cancellationToken: cancellationToken);
 
-            return await DeserializeToHttpResult<TResult>(response, cancellationToken);
+                return await DeserializeToHttpResult<TResult>(response, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<HttpResult<TResult>> PutJsonAsync<TResult>(string url, object data, CancellationToken cancellationToken)
