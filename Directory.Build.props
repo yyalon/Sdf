@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <Sdf_Version>8.0.0</Sdf_Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1803</NoWarn>
+  </PropertyGroup>
+
+</Project>

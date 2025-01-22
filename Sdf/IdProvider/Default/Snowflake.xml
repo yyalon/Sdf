@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Snowflake>
+  <!--机器ID 最大31-->
+  <WorkerId>1</WorkerId>
+  <!--数据中心ID 最大31-->
+  <DatacenterId>1</DatacenterId>
+  <!--起始种子-->
+  <Sequence>0</Sequence>
+</Snowflake>

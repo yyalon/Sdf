@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	<OutputType>Library</OutputType>
+	<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>简单快速开发框架</Description>
+    <PackageProjectUrl>https://github.com/yyalon/Sdf</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/yyalon/Sdf</RepositoryUrl>
+    <Version>$(Sdf_Version)</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Fundamentals\Logging\**" />
+    <Compile Remove="Fundamentals\Logs\**" />
+    <EmbeddedResource Remove="Fundamentals\Logging\**" />
+    <EmbeddedResource Remove="Fundamentals\Logs\**" />
+    <None Remove="Fundamentals\Logging\**" />
+    <None Remove="Fundamentals\Logs\**" />
+    <None Include="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>
+      </PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
+    <PackageReference Include="Snowflake.Core" Version="2.0.0" />
+    <PackageReference Include="TinyMapper" Version="3.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdf.Common\Sdf.Common.csproj" />
+  </ItemGroup>
+</Project>
